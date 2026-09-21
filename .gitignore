@@ -47,33 +47,5 @@ app.*.map.json
 # Widget Preview related
 .widget_preview/
 
-# Project specific
-# ================================
-
-# Environment / secrets
-.env
-.env.*
-!.env.example
-
-# Local configuration
-local.properties
-
-# Signing keys / certificates
-*.jks
-*.keystore
-*.p12
-*.pem
-*.key
-
-# Local database
-*.db
-*.sqlite
-*.sqlite3
-
-# Local test data
-test_data/
-local_data/
-
-# User / captured images
-user_images/
-captured_images/
+# FVM local SDK cache and generated files
+.fvm/
