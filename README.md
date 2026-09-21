@@ -24,6 +24,9 @@ fvm flutter run
 ```text
 android/       Android 플랫폼 프로젝트
 ios/           iOS 플랫폼 프로젝트
+docs/          과제 요구사항 문서
+screenshots/   과제 요구사항 화면 캡처 사진
+
 lib/
   app/         앱 구성 관련 코드
   data/        데이터 관련 코드
@@ -31,6 +34,7 @@ lib/
   page/        화면 코드
   service/     서비스 코드
   main.dart    앱 진입점
+
 test/          테스트 코드
 .fvmrc         프로젝트 Flutter 버전 설정
 pubspec.yaml   패키지 및 프로젝트 설정
