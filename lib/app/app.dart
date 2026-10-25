@@ -27,7 +27,7 @@ class _AppState extends State<App> {
     _router = AppRouter(
       inputService: DeviceImageInputService(),
       analysisService: const AnalysisService(
-        UnavailableOcrAnalyzer(),
+        MlKitOcrAnalyzer(),
         UnavailableTextAnalyzer(),
       ),
       historyStore: _historyStore,
