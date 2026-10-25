@@ -25,7 +25,7 @@ class _AppState extends State<App> {
     super.initState();
     _historyStore = AnalysisHistoryStore();
     _router = AppRouter(
-      inputService: UnavailableImageInputService(),
+      inputService: DeviceImageInputService(),
       analysisService: const AnalysisService(
         UnavailableOcrAnalyzer(),
         UnavailableTextAnalyzer(),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../app/app_router.dart';
@@ -117,7 +119,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 ),
                 const SizedBox(height: 32),
                 _PhotoPicker(
-                  selected: _input != null,
+                  imagePath: _input?.path,
                   isLoading: _isPicking,
                   onTap: _showSourcePicker,
                 ),
@@ -171,17 +173,18 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
 class _PhotoPicker extends StatelessWidget {
   const _PhotoPicker({
-    required this.selected,
+    required this.imagePath,
     required this.isLoading,
     required this.onTap,
   });
 
-  final bool selected;
+  final String? imagePath;
   final bool isLoading;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final selected = imagePath != null;
     return AspectRatio(
       aspectRatio: 0.98,
       child: Material(
@@ -204,10 +207,16 @@ class _PhotoPicker extends StatelessWidget {
                   opacity: selected ? 1 : 0.3,
                   child: Transform.scale(
                     scale: selected ? 1 : 1.25,
-                    child: Image.asset(
-                      selected ? _samplePhotoAsset : _previewAsset,
-                      fit: selected ? BoxFit.cover : BoxFit.contain,
-                    ),
+                    child: selected
+                        ? Image.file(
+                            File(imagePath!),
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => Image.asset(
+                              _samplePhotoAsset,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Image.asset(_previewAsset, fit: BoxFit.contain),
                   ),
                 ),
               ),
