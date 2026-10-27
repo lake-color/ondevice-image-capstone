@@ -5,7 +5,7 @@ import '../service/analysis_service.dart';
 import '../service/image_input_service.dart';
 import '../service/ocr_analyzer.dart';
 import '../service/share_service.dart';
-import '../service/text_analyzer.dart';
+import '../service/mobilenet_classifier.dart';
 import 'app_router.dart';
 import 'app_theme.dart';
 
@@ -27,9 +27,9 @@ class _AppState extends State<App> {
     _historyStore.load();
     _router = AppRouter(
       inputService: DeviceImageInputService(),
-      analysisService: const AnalysisService(
-        MlKitOcrAnalyzer(),
-        UnavailableTextAnalyzer(),
+      analysisService: AnalysisService(
+        const MlKitOcrAnalyzer(),
+        MobileNetClassifier(),
       ),
       historyStore: _historyStore,
       shareService: ClipboardShareService(),

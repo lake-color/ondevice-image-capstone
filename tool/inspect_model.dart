@@ -34,8 +34,9 @@ void main() {
   final bytes = File('assets/models/mobilenet_v3_small.tflite')
       .readAsBytesSync();
   final r = Reader(bytes);
-  if (ascii.decode(bytes.sublist(4, 8)) != 'TFL3')
+  if (ascii.decode(bytes.sublist(4, 8)) != 'TFL3') {
     throw const FormatException('Not TFLite');
+  }
   final graph = r.vector(r.root, 2, r.indirect).first;
   final tensors = r.vector(graph, 0, r.indirect);
   Map<String, Object?> describe(int index) {
@@ -67,7 +68,7 @@ void main() {
   final last = r.vector(graph, 3, r.indirect).last;
   final codes = r.vector(r.root, 1, r.indirect);
   final code = codes[r.field(last, 0) == 0 ? 0 : r.u32(r.field(last, 0))];
-  print(
+  stdout.writeln(
     const JsonEncoder.withIndent('  ').convert({
       'bytes': bytes.length,
       'inputs': r.vector(graph, 1, r.i32).map(describe).toList(),

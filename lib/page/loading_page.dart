@@ -4,6 +4,7 @@ import '../app/app_router.dart';
 import '../data/analysis_history_store.dart';
 import '../domain/analysis_result.dart';
 import '../service/analysis_service.dart';
+import '../service/image_classifier.dart';
 
 const _analysisAsset = 'docs/design-references/이미지소스/분석 이미지.png';
 const _cancelAsset = 'docs/design-references/이미지소스/분석 취소 이미지.png';
@@ -83,7 +84,12 @@ class _LoadingPageState extends State<LoadingPage> {
                           ),
                         ],
                       )
-                    : _AnalysisError(onClose: () => Navigator.pop(context)),
+                    : _AnalysisError(
+                        onClose: () => Navigator.pop(context),
+                        message: _error is ClassificationException
+                            ? (_error as ClassificationException).message
+                            : null,
+                      ),
               ),
             ),
           ),
@@ -146,9 +152,10 @@ class _LoadingContent extends StatelessWidget {
 }
 
 class _AnalysisError extends StatelessWidget {
-  const _AnalysisError({required this.onClose});
+  const _AnalysisError({required this.onClose, this.message});
 
   final VoidCallback onClose;
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
@@ -178,9 +185,7 @@ class _AnalysisError extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const Divider(height: 18),
-            const Text(
-              '오류로 처리하지 않고 다시 시도할 수 있게 안내합니다.\n다른 사진을 선택하거나 분석 방식을 바꿔보세요.',
-            ),
+            Text(message ?? '다른 사진을 선택하거나 분석 방식을 바꿔보세요.'),
             const SizedBox(height: 20),
             OutlinedButton(onPressed: onClose, child: const Text('다른 사진 분석')),
           ],

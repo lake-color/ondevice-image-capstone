@@ -2,7 +2,7 @@ import '../domain/analysis_method.dart';
 import '../domain/analysis_result.dart';
 import 'image_input_service.dart';
 import 'ocr_analyzer.dart';
-import 'text_analyzer.dart';
+import 'image_classifier.dart';
 
 class AnalysisRequest {
   const AnalysisRequest({required this.method, required this.input});
@@ -12,10 +12,10 @@ class AnalysisRequest {
 }
 
 class AnalysisService {
-  const AnalysisService(this._ocr, this._text);
+  const AnalysisService(this._ocr, this._classifier);
 
   final OcrAnalyzer _ocr;
-  final TextAnalyzer _text;
+  final ImageClassifier _classifier;
 
   Future<AnalysisResult> analyze(AnalysisRequest request) async {
     final stopwatch = Stopwatch()..start();
@@ -42,7 +42,7 @@ class AnalysisService {
   }
 
   Future<(String, String, double?)> _classify(ImageInput input) async {
-    final output = await _text.classify(input);
+    final output = await _classifier.classify(input);
     return ('분류 결과', output.label, output.confidence);
   }
 }

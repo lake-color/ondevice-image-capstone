@@ -1,0 +1,3 @@
+# Preserve the exact model and embedded-label bytes across checkouts.
+assets/models/*.tflite binary
+assets/models/imagenet_labels.txt -text
