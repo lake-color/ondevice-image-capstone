@@ -24,6 +24,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
     _historyStore = AnalysisHistoryStore();
+    _historyStore.load();
     _router = AppRouter(
       inputService: DeviceImageInputService(),
       analysisService: const AnalysisService(

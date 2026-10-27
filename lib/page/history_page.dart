@@ -38,12 +38,27 @@ class HistoryPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        '분석 결과는 현재 실행 중인 세션에 저장됩니다.',
+                        '분석 결과는 이 기기에 저장됩니다.',
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 24),
                       Expanded(
-                        child: entries.isEmpty
+                        child: historyStore.loadError != null
+                            ? Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(historyStore.loadError!),
+                                    TextButton(
+                                      onPressed: historyStore.load,
+                                      child: const Text('다시 시도'),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : !historyStore.isLoaded
+                            ? const Center(child: CircularProgressIndicator())
+                            : entries.isEmpty
                             ? _EmptyHistory(
                                 onStart: () => Navigator.pop(context),
                               )
@@ -72,7 +87,7 @@ class HistoryPage extends StatelessWidget {
                       ),
                       const SizedBox(height: 14),
                       Text(
-                        '영구 저장 패키지를 연결하면 앱을 다시 실행해도 이력이 유지됩니다.',
+                        '앱을 다시 실행해도 이력이 유지됩니다. 원본 사진은 저장하지 않아요.',
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodySmall
                             ?.copyWith(fontSize: 10),
@@ -117,7 +132,14 @@ class HistoryPage extends StatelessWidget {
         ],
       ),
     );
-    if (confirmed == true) await historyStore.delete(entry.id);
+    if (confirmed != true) return;
+    try {
+      await historyStore.delete(entry.id);
+    } on HistoryStorageException catch (error) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.message)));
+    }
   }
 }
 

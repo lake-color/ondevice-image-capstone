@@ -20,6 +20,28 @@ class AnalysisResult {
   final DateTime createdAt;
   final double? confidence;
 
+  Map<String, Object?> toJson() => {
+    'method': method.name,
+    'sourceName': sourceName,
+    'title': title,
+    'content': content,
+    'durationMicroseconds': duration.inMicroseconds,
+    'createdAt': createdAt.toIso8601String(),
+    'confidence': confidence,
+  };
+
+  factory AnalysisResult.fromJson(Map<String, dynamic> json) {
+    return AnalysisResult(
+      method: AnalysisMethod.values.byName(json['method'] as String),
+      sourceName: json['sourceName'] as String,
+      title: json['title'] as String,
+      content: json['content'] as String,
+      duration: Duration(microseconds: json['durationMicroseconds'] as int),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      confidence: (json['confidence'] as num?)?.toDouble(),
+    );
+  }
+
   String get shareText {
     final confidenceText = confidence == null
         ? ''

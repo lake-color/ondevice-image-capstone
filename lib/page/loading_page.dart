@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app/app_router.dart';
 import '../data/analysis_history_store.dart';
+import '../domain/analysis_result.dart';
 import '../service/analysis_service.dart';
 
 const _analysisAsset = 'docs/design-references/이미지소스/분석 이미지.png';
@@ -25,6 +26,7 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
   Object? _error;
+  AnalysisResult? _result;
 
   @override
   void initState() {
@@ -33,8 +35,12 @@ class _LoadingPageState extends State<LoadingPage> {
   }
 
   Future<void> _runAnalysis() async {
+    setState(() => _error = null);
     try {
-      final result = await widget.analysisService.analyze(widget.request);
+      final result = _result ??= await widget.analysisService.analyze(
+        widget.request,
+      );
+      if (!mounted) return;
       await widget.historyStore.add(result);
       if (!mounted) return;
       await Navigator.pushReplacementNamed(
@@ -60,6 +66,23 @@ class _LoadingPageState extends State<LoadingPage> {
                 padding: const EdgeInsets.all(22),
                 child: _error == null
                     ? _LoadingContent(onCancel: () => Navigator.pop(context))
+                    : _error is HistoryStorageException
+                    ? Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('분석은 완료했지만 이력을 저장하지 못했어요.'),
+                          const SizedBox(height: 12),
+                          Text((_error as HistoryStorageException).message),
+                          FilledButton(
+                            onPressed: _runAnalysis,
+                            child: const Text('저장 다시 시도'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('돌아가기'),
+                          ),
+                        ],
+                      )
                     : _AnalysisError(onClose: () => Navigator.pop(context)),
               ),
             ),

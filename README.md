@@ -1,7 +1,8 @@
 # On-device Image Capstone
 
 Android와 iOS를 대상으로 하는 Flutter 기반 학교 캡스톤 디자인 프로젝트입니다.
-현재는 프로젝트 초기 설정과 기본 구조를 구성하는 단계입니다.
+카메라·갤러리 입력, ML Kit OCR, 결과 화면과 로컬 분석 이력 저장을 구현했습니다.
+이미지 분류는 MobileNetV3 모델 및 라벨 파일이 없어 아직 사용할 수 없습니다.
 
 ## 개발 환경
 
@@ -18,6 +19,24 @@ FVM이 설치된 환경에서 다음 명령어를 실행합니다.
 fvm flutter pub get
 fvm flutter run
 ```
+
+## 현재 구현 상태
+
+- OCR: 기기 내 텍스트 인식, 결과 복사
+- 이력: 결과 텍스트·분석 종류·처리 시간·날짜·신뢰도를 기기에 저장, 조회·삭제 및 재실행 후 복원
+- 저장 오류: 읽기 재시도, 분석 결과 저장 재시도, 손상 파일 덮어쓰기 방지
+- 원본 사진은 분석 이력에 저장하지 않음
+- Firebase 동기화와 이미지 분류는 미구현
+
+이력은 앱 지원 디렉터리의 `analysis_history.json`에 저장합니다. 임시 파일을
+완전히 기록한 뒤 교체하고, 저장 성공 후 메모리를 갱신합니다.
+앱 삭제 또는 앱 데이터 초기화 시 이력이 사라질 수 있습니다.
+
+검증 명령: `fvm flutter analyze`, `fvm flutter test`, `fvm flutter build apk --debug`.
+실제 기기에서 사진 선택 → OCR → 앱 종료·재실행 → 이력 조회·삭제를 추가 확인해야 합니다.
+
+다음 작업은 MobileNetV3 모델·라벨·입출력 사양 확보 후 LiteRT 분류 연동입니다.
+로컬 저장 경로는 [path_provider 공식 문서](https://pub.dev/packages/path_provider)를 기준으로 구성했습니다.
 
 ## 프로젝트 구조
 

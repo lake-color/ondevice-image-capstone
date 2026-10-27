@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:ondevice_image_capstone/main.dart';
 
 void main() {
-  testWidgets('시작 화면에서 사진 선택과 빈 이력 화면으로 이동한다', (tester) async {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('plugins.flutter.io/path_provider'),
+          (_) async => null,
+        );
+  });
+  testWidgets('시작 화면에서 사진 선택과 이력 로드 실패 안내로 이동한다', (tester) async {
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
 
@@ -28,6 +37,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('분석 이력'), findsOneWidget);
-    expect(find.text('아직 분석 이력이 없어요'), findsOneWidget);
+    expect(find.text('저장된 이력을 불러오지 못했어요. 다시 시도해 주세요.'), findsOneWidget);
+    expect(find.text('다시 시도'), findsOneWidget);
   });
 }

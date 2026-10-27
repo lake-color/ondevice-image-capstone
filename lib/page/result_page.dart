@@ -77,7 +77,7 @@ class ResultPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '분석 결과는 현재 실행 중인 세션에 저장됩니다.',
+                  '분석 결과는 이 기기에 저장되었습니다.',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
