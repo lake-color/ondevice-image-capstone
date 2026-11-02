@@ -10,6 +10,7 @@ class AnalysisResult {
     required this.duration,
     required this.createdAt,
     this.confidence,
+    this.imagePath,
   });
 
   final AnalysisMethod method;
@@ -19,6 +20,9 @@ class AnalysisResult {
   final Duration duration;
   final DateTime createdAt;
   final double? confidence;
+
+  /// Only used for the current preview; never serialized into history.
+  final String? imagePath;
 
   Map<String, Object?> toJson() => {
     'method': method.name,

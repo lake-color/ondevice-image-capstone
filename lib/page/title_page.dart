@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app/app_router.dart';
 
-const _titleAsset = 'docs/design-references/이미지소스/타이틀이미지.png';
+const _titleAsset = 'assets/images/타이틀이미지.png';
 
 class TitlePage extends StatelessWidget {
   const TitlePage({super.key});

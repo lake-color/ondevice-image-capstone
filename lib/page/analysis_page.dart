@@ -7,8 +7,7 @@ import '../domain/analysis_method.dart';
 import '../service/analysis_service.dart';
 import '../service/image_input_service.dart';
 
-const _previewAsset = 'docs/design-references/이미지소스/미리보기 이미지.png';
-const _samplePhotoAsset = 'docs/design-references/이미지소스/타이틀이미지.png';
+const _previewAsset = 'assets/images/미리보기 이미지.png';
 
 class AnalysisPage extends StatefulWidget {
   const AnalysisPage({super.key, required this.inputService});
@@ -61,7 +60,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
     setState(() => _isPicking = true);
     try {
       final input = await widget.inputService.pick(source);
-      if (mounted && input != null) setState(() => _input = input);
+      if (mounted && input != null) {
+        await FileImage(File(input.path)).evict();
+        if (mounted) setState(() => _input = input);
+      }
     } on ImagePermissionDeniedException {
       if (mounted) await _showPermissionDialog();
     } on ImageInputUnavailableException catch (error) {
@@ -75,13 +77,8 @@ class _AnalysisPageState extends State<AnalysisPage> {
   }
 
   Future<void> _startAnalysis(AnalysisMethod method) async {
+    if (_input == null || _isPicking) return;
     setState(() => _selectedMethod = method);
-    if (_input == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('먼저 분석할 사진을 추가해 주세요.')));
-      return;
-    }
-
     await Navigator.pushNamed(
       context,
       AppRoutes.loading,
@@ -138,7 +135,9 @@ class _AnalysisPageState extends State<AnalysisPage> {
                             child: _AnalysisMethodButton(
                               method: method,
                               selected: method == _selectedMethod,
-                              onTap: () => _startAnalysis(method),
+                              onTap: _input == null || _isPicking
+                                  ? null
+                                  : () => _startAnalysis(method),
                             ),
                           ),
                         ),
@@ -211,9 +210,8 @@ class _PhotoPicker extends StatelessWidget {
                         ? Image.file(
                             File(imagePath!),
                             fit: BoxFit.cover,
-                            errorBuilder: (_, _, _) => Image.asset(
-                              _samplePhotoAsset,
-                              fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => const Center(
+                              child: Text('사진을 불러올 수 없습니다. 다시 선택해 주세요.'),
                             ),
                           )
                         : Image.asset(_previewAsset, fit: BoxFit.contain),
@@ -250,42 +248,49 @@ class _AnalysisMethodButton extends StatelessWidget {
 
   final AnalysisMethod method;
   final bool selected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
-    return Material(
-      color: selected ? const Color(0xFFEDEBFF) : Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
-        side: BorderSide(
-          color: selected ? primary : const Color(0xFFD9DCE6),
-          width: selected ? 2 : 1,
-        ),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(18),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 22),
-          child: Column(
-            children: [
-              Text(
-                method.title,
-                style: const TextStyle(
-                  color: Color(0xFF151927),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                ),
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      child: Opacity(
+        opacity: onTap == null ? 0.4 : 1,
+        child: Material(
+          color: selected ? const Color(0xFFEDEBFF) : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: BorderSide(
+              color: selected ? primary : const Color(0xFFD9DCE6),
+              width: selected ? 2 : 1,
+            ),
+          ),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(18),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 22),
+              child: Column(
+                children: [
+                  Text(
+                    method.title,
+                    style: const TextStyle(
+                      color: Color(0xFF151927),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    method.description,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: const Color(0xFF777B88)),
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                method.description,
-                style: Theme.of(context).textTheme.bodySmall
-                    ?.copyWith(color: const Color(0xFF777B88)),
-              ),
-            ],
+            ),
           ),
         ),
       ),

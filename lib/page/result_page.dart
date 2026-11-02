@@ -1,9 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../domain/analysis_result.dart';
 import '../service/share_service.dart';
-
-const _resultPhotoAsset = 'docs/design-references/이미지소스/타이틀이미지.png';
 
 class ResultPage extends StatelessWidget {
   const ResultPage({
@@ -28,7 +28,7 @@ class ResultPage extends StatelessWidget {
                 Text('분석 결과', style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(height: 6),
                 Text(
-                  '사물 분석 결과를 확인하세요.',
+                  '${result.method.title} 결과를 확인하세요.',
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 26),
@@ -43,7 +43,16 @@ class ResultPage extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.asset(_resultPhotoAsset, fit: BoxFit.cover),
+                      if (result.imagePath != null)
+                        Image.file(
+                          File(result.imagePath!),
+                          key: ValueKey(result.imagePath),
+                          fit: BoxFit.contain,
+                          errorBuilder: (_, _, _) =>
+                              const Center(child: Text('원본 사진을 불러올 수 없습니다.')),
+                        )
+                      else
+                        const Center(child: Text('원본 사진은 이력에 저장되지 않습니다.')),
                       const Align(
                         alignment: Alignment.bottomCenter,
                         child: ColoredBox(
@@ -134,6 +143,10 @@ class _ResultCard extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineSmall
                 ?.copyWith(fontSize: 25),
           ),
+          if (confidence != null && confidence < 0.5) ...[
+            const SizedBox(height: 10),
+            const Text('신뢰도가 낮은 추정 결과입니다. 사물이 크게 보이는 사진으로 다시 분석해 주세요.'),
+          ],
           const Divider(height: 18),
           _MetaRow(label: '처리 시간', value: _formatDuration(result.duration)),
           if (confidence != null)

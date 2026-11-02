@@ -46,6 +46,21 @@ void main() {
     expect(input.skip(input.length - 3), [0, 1, 0]);
   });
 
+  test(
+    'transparent pixels are composited onto the white preview background',
+    () {
+      final image = img.Image(width: 2, height: 2, numChannels: 4);
+      img.fill(image, color: img.ColorRgba8(255, 0, 0, 0));
+      final input = prepareClassificationInput(img.encodePng(image));
+      expect(input.take(3), [1, 1, 1]);
+      img.fill(image, color: img.ColorRgba8(255, 0, 0, 128));
+      final translucent = prepareClassificationInput(img.encodePng(image));
+      expect(translucent[0], 1);
+      expect(translucent[1], closeTo(127 / 255, 0.01));
+      expect(translucent[2], closeTo(127 / 255, 0.01));
+    },
+  );
+
   test('JPEG EXIF orientation rotates the image before inference', () {
     final image = img.Image(width: 32, height: 32);
     for (var y = 0; y < 32; y++) {

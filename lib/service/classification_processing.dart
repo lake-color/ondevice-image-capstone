@@ -45,8 +45,13 @@ Float32List prepareClassificationInput(Uint8List encoded) {
     width: side,
     height: side,
   );
+  // Match the white preview background instead of discarding alpha and
+  // feeding invisible RGB values to the classifier.
+  final rgb = img.Image(width: side, height: side, numChannels: 3);
+  img.fill(rgb, color: img.ColorRgb8(255, 255, 255));
+  img.compositeImage(rgb, cropped);
   final resized = img.copyResize(
-    cropped.convert(format: img.Format.uint8, numChannels: 3),
+    rgb,
     width: classificationInputSize,
     height: classificationInputSize,
     interpolation: img.Interpolation.linear,

@@ -23,7 +23,7 @@ class MlKitOcrAnalyzer implements OcrAnalyzer {
 
   @override
   Future<String> recognize(ImageInput input) async {
-    final recognizer = TextRecognizer(script: TextRecognitionScript.latin);
+    final recognizer = TextRecognizer(script: TextRecognitionScript.korean);
     try {
       final image = InputImage.fromFilePath(input.path);
       final result = await recognizer.processImage(image);

@@ -33,6 +33,7 @@ class AnalysisService {
     return AnalysisResult(
       method: request.method,
       sourceName: request.input.name,
+      imagePath: request.input.path,
       title: title,
       content: content,
       confidence: confidence,
@@ -43,6 +44,9 @@ class AnalysisService {
 
   Future<(String, String, double?)> _classify(ImageInput input) async {
     final output = await _classifier.classify(input);
-    return ('분류 결과', output.label, output.confidence);
+    // The model's apple class is named after a cultivar; it cannot establish
+    // the actual cultivar of an arbitrary apple photo.
+    final label = output.label == 'Granny Smith' ? '사과' : output.label;
+    return ('분류 결과', label, output.confidence);
   }
 }

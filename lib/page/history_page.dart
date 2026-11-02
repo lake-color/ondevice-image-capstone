@@ -4,7 +4,7 @@ import '../data/analysis_history_store.dart';
 import '../domain/analysis_history.dart';
 import '../service/share_service.dart';
 
-const _trashAsset = 'docs/design-references/이미지소스/휴지통 아이콘.png';
+const _trashAsset = 'assets/images/휴지통 아이콘.png';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({
@@ -121,13 +121,22 @@ class HistoryPage extends StatelessWidget {
         title: const Text('이 기록을 삭제할까요?'),
         content: const Text('삭제한 분석 결과는 복구할 수 없습니다.'),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('삭제'),
+          Row(
+            children: [
+              Expanded(
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('취소'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: FilledButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: const Text('삭제'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

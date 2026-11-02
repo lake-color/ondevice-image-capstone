@@ -5,9 +5,10 @@ import '../data/analysis_history_store.dart';
 import '../domain/analysis_result.dart';
 import '../service/analysis_service.dart';
 import '../service/image_classifier.dart';
+import '../service/ocr_analyzer.dart';
 
-const _analysisAsset = 'docs/design-references/이미지소스/분석 이미지.png';
-const _cancelAsset = 'docs/design-references/이미지소스/분석 취소 이미지.png';
+const _analysisAsset = 'assets/images/분석 이미지.png';
+const _cancelAsset = 'assets/images/분석 취소 이미지.png';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({
@@ -86,9 +87,12 @@ class _LoadingPageState extends State<LoadingPage> {
                       )
                     : _AnalysisError(
                         onClose: () => Navigator.pop(context),
-                        message: _error is ClassificationException
-                            ? (_error as ClassificationException).message
-                            : null,
+                        message: switch (_error) {
+                          ClassificationException error => error.message,
+                          OcrRecognitionException error => error.message,
+                          OcrUnavailableException error => error.message,
+                          _ => null,
+                        },
                       ),
               ),
             ),
