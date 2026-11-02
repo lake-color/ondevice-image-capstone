@@ -8,6 +8,7 @@
 | [디자인 자료](design/README.md) | 참고 화면과 기존 UI 검토 범위 |
 | [개인정보 제출물](submission/PRIVACY.md) | 작성 예정 |
 | [프롬프트 기록 제출물](submission/prompts_log.md) | 작성 예정 |
+| [스크린샷 제출 폴더](submission/screenshots/) | 기존 캡처 삭제, 제출용 화면 촬영 예정 |
 
 실행 방법은 [루트 README](../README.md), 테스트 명령은
 [테스트 안내](../test/README.md)를 기준으로 합니다.

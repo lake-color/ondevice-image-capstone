@@ -4,13 +4,6 @@ import 'analysis_result.dart';
 class AnalysisHistory {
   const AnalysisHistory({required this.id, required this.result});
 
-  factory AnalysisHistory.fromResult(AnalysisResult result) {
-    return AnalysisHistory(
-      id: result.createdAt.microsecondsSinceEpoch.toString(),
-      result: result,
-    );
-  }
-
   final String id;
   final AnalysisResult result;
 }

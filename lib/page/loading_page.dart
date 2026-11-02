@@ -57,44 +57,40 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: true,
-      child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 430),
-              child: Padding(
-                padding: const EdgeInsets.all(22),
-                child: _error == null
-                    ? _LoadingContent(onCancel: () => Navigator.pop(context))
-                    : _error is HistoryStorageException
-                    ? Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('분석은 완료했지만 이력을 저장하지 못했어요.'),
-                          const SizedBox(height: 12),
-                          Text((_error as HistoryStorageException).message),
-                          FilledButton(
-                            onPressed: _runAnalysis,
-                            child: const Text('저장 다시 시도'),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text('돌아가기'),
-                          ),
-                        ],
-                      )
-                    : _AnalysisError(
-                        onClose: () => Navigator.pop(context),
-                        message: switch (_error) {
-                          ClassificationException error => error.message,
-                          OcrRecognitionException error => error.message,
-                          OcrUnavailableException error => error.message,
-                          _ => null,
-                        },
-                      ),
-              ),
+    return Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 430),
+            child: Padding(
+              padding: const EdgeInsets.all(22),
+              child: _error == null
+                  ? _LoadingContent(onCancel: () => Navigator.pop(context))
+                  : _error is HistoryStorageException
+                  ? Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('분석은 완료했지만 이력을 저장하지 못했어요.'),
+                        const SizedBox(height: 12),
+                        Text((_error as HistoryStorageException).message),
+                        FilledButton(
+                          onPressed: _runAnalysis,
+                          child: const Text('저장 다시 시도'),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('돌아가기'),
+                        ),
+                      ],
+                    )
+                  : _AnalysisError(
+                      onClose: () => Navigator.pop(context),
+                      message: switch (_error) {
+                        ClassificationException error => error.message,
+                        OcrRecognitionException error => error.message,
+                        _ => null,
+                      },
+                    ),
             ),
           ),
         ),

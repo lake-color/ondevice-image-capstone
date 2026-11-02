@@ -21,11 +21,7 @@ void main() {
       await fixture.writeAsBytes(img.encodePng(image));
       addTearDown(() => fixture.delete());
       final classifier = MobileNetClassifier();
-      final input = ImageInput(
-        name: 'smoke.png',
-        path: fixture.path,
-        source: ImageSourceType.gallery,
-      );
+      final input = ImageInput(name: 'smoke.png', path: fixture.path);
       final first = await classifier.classify(input);
       final second = await classifier.classify(input);
       expect(first.label, isNotEmpty);

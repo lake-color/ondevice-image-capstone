@@ -14,15 +14,10 @@ class ImageInputUnavailableException implements Exception {
 }
 
 class ImageInput {
-  const ImageInput({
-    required this.name,
-    required this.path,
-    required this.source,
-  });
+  const ImageInput({required this.name, required this.path});
 
   final String name;
   final String path;
-  final ImageSourceType source;
 }
 
 abstract interface class ImageInputService {
@@ -53,7 +48,7 @@ class DeviceImageInputService implements ImageInputService {
       );
       if (image == null) return null;
 
-      return ImageInput(name: image.name, path: image.path, source: source);
+      return ImageInput(name: image.name, path: image.path);
     } on PlatformException catch (error) {
       if (_permissionErrorCodes.contains(error.code)) {
         throw const ImagePermissionDeniedException();
@@ -62,13 +57,5 @@ class DeviceImageInputService implements ImageInputService {
         error.message ?? '사진을 불러오지 못했습니다. 다시 시도해 주세요.',
       );
     }
-  }
-}
-
-/// Explicitly reports that native image input has not been configured yet.
-class UnavailableImageInputService implements ImageInputService {
-  @override
-  Future<ImageInput?> pick(ImageSourceType source) {
-    throw const ImageInputUnavailableException('카메라와 갤러리 플러그인이 아직 연결되지 않았습니다.');
   }
 }

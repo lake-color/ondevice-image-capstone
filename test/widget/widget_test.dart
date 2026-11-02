@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:ondevice_image_capstone/main.dart';
+import 'package:ondevice_image_capstone/app/app.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +13,7 @@ void main() {
         );
   });
   testWidgets('시작 화면에서 사진 선택과 이력 로드 실패 안내로 이동한다', (tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(const App());
     await tester.pumpAndSettle();
 
     expect(find.text('사진 속 정보를\n기기에서 바로 분석해요'), findsOneWidget);

@@ -33,11 +33,7 @@ void main() {
       await AnalysisService(FakeOcr(), FakeClassifier()).analyze(
         const AnalysisRequest(
           method: AnalysisMethod.ocr,
-          input: ImageInput(
-            name: 'text.jpg',
-            path: '/tmp/text.jpg',
-            source: ImageSourceType.gallery,
-          ),
+          input: ImageInput(name: 'text.jpg', path: '/tmp/text.jpg'),
         ),
       ),
     );
@@ -77,7 +73,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.light,
-        home: AnalysisPage(inputService: UnavailableImageInputService()),
+        home: AnalysisPage(inputService: FakeImageInputService()),
       ),
     );
     for (final title in ['사물 분석', '텍스트 분석']) {
@@ -99,11 +95,7 @@ void main() {
         final result = await service.analyze(
           AnalysisRequest(
             method: AnalysisMethod.ocr,
-            input: ImageInput(
-              name: name,
-              path: '/tmp/$name',
-              source: ImageSourceType.gallery,
-            ),
+            input: ImageInput(name: name, path: '/tmp/$name'),
           ),
         );
         expect(result.imagePath, '/tmp/$name');
@@ -128,6 +120,11 @@ class FakeClassifier implements ImageClassifier {
   @override
   Future<ClassificationOutput> classify(ImageInput input) async =>
       const ClassificationOutput(label: 'cat', confidence: 0.9);
+}
+
+class FakeImageInputService implements ImageInputService {
+  @override
+  Future<ImageInput?> pick(ImageSourceType source) async => null;
 }
 
 class MemoryHistoryStorage implements HistoryStorage {

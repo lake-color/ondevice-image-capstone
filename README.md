@@ -50,8 +50,7 @@ docs/
   STATUS.md    진행 현황·검증 기록·남은 작업
   technical/   기술 구성과 모델 사양
   design/      디자인 참고 화면
-  submission/  개인정보·프롬프트 기록 제출물
-screenshots/   구현 화면 및 디자인 비교 이미지
+  submission/  개인정보·프롬프트 기록·스크린샷 제출물
 tool/          모델 검사 도구
 ```
 

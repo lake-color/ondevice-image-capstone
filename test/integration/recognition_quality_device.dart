@@ -15,11 +15,8 @@ const photoUrls = {
   'apple': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg',
 };
 
-ImageInput input(String path) => ImageInput(
-  name: path.split('/').last,
-  path: path,
-  source: ImageSourceType.gallery,
-);
+ImageInput input(String path) =>
+    ImageInput(name: path.split('/').last, path: path);
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
