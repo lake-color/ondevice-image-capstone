@@ -6,14 +6,9 @@ import '../domain/analysis_result.dart';
 import '../service/share_service.dart';
 
 class ResultPage extends StatelessWidget {
-  const ResultPage({
-    super.key,
-    required this.result,
-    required this.shareService,
-  });
+  const ResultPage({super.key, required this.result});
 
   final AnalysisResult result;
-  final ShareService shareService;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +71,7 @@ class ResultPage extends StatelessWidget {
                 _ResultCard(result: result),
                 const SizedBox(height: 24),
                 FilledButton(
-                  onPressed: () => _share(context),
+                  onPressed: () => shareResult(context, result),
                   child: const Text('결과 공유하기'),
                 ),
                 const SizedBox(height: 10),
@@ -96,13 +91,6 @@ class ResultPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _share(BuildContext context) async {
-    await shareService.share(result);
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('분석 결과를 클립보드에 복사했습니다.')));
   }
 }
 

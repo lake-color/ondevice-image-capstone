@@ -7,14 +7,9 @@ import '../service/share_service.dart';
 const _trashAsset = 'assets/images/휴지통 아이콘.png';
 
 class HistoryPage extends StatelessWidget {
-  const HistoryPage({
-    super.key,
-    required this.historyStore,
-    required this.shareService,
-  });
+  const HistoryPage({super.key, required this.historyStore});
 
   final AnalysisHistoryStore historyStore;
-  final ShareService shareService;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +72,7 @@ class HistoryPage extends StatelessWidget {
                       FilledButton(
                         onPressed: entries.isEmpty
                             ? null
-                            : () => _share(context, entries.first),
+                            : () => shareResult(context, entries.first.result),
                         child: const Text('결과 공유하기'),
                       ),
                       const SizedBox(height: 10),
@@ -101,13 +96,6 @@ class HistoryPage extends StatelessWidget {
         );
       },
     );
-  }
-
-  Future<void> _share(BuildContext context, AnalysisHistory entry) async {
-    await shareService.share(entry.result);
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(const SnackBar(content: Text('최근 분석 결과를 클립보드에 복사했습니다.')));
   }
 
   Future<void> _confirmDelete(

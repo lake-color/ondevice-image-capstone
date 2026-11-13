@@ -9,7 +9,6 @@ import '../page/result_page.dart';
 import '../page/title_page.dart';
 import '../service/analysis_service.dart';
 import '../service/image_input_service.dart';
-import '../service/share_service.dart';
 
 abstract final class AppRoutes {
   static const home = '/';
@@ -24,13 +23,11 @@ class AppRouter {
     required this.inputService,
     required this.analysisService,
     required this.historyStore,
-    required this.shareService,
   });
 
   final ImageInputService inputService;
   final AnalysisService analysisService;
   final AnalysisHistoryStore historyStore;
-  final ShareService shareService;
 
   Route<void> onGenerateRoute(RouteSettings settings) {
     final Widget page = switch (settings.name) {
@@ -43,12 +40,8 @@ class AppRouter {
       ),
       AppRoutes.result => ResultPage(
         result: settings.arguments! as AnalysisResult,
-        shareService: shareService,
       ),
-      AppRoutes.history => HistoryPage(
-        historyStore: historyStore,
-        shareService: shareService,
-      ),
+      AppRoutes.history => HistoryPage(historyStore: historyStore),
       _ => const TitlePage(),
     };
 
