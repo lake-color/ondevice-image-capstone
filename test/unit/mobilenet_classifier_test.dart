@@ -4,8 +4,8 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
-import 'package:ondevice_image_capstone/service/classification_processing.dart';
-import 'package:ondevice_image_capstone/service/image_classifier.dart';
+import 'package:ondevice_image_capstone/domain/exceptions.dart';
+import 'package:ondevice_image_capstone/service/mobilenet_classifier.dart';
 
 void main() {
   final labels = parseClassificationLabels(
@@ -18,7 +18,7 @@ void main() {
     expect(labels[2], 'goldfish');
     expect(
       () => parseClassificationLabels('tench\ngoldfish'),
-      throwsA(isA<ClassificationException>()),
+      throwsA(isA<AnalysisException>()),
     );
   });
 
@@ -82,7 +82,7 @@ void main() {
   test('damaged and unsupported images return an actionable error', () {
     expect(
       () => prepareClassificationInput(Uint8List.fromList([1, 2, 3])),
-      throwsA(isA<ClassificationException>()),
+      throwsA(isA<AnalysisException>()),
     );
   });
 
@@ -101,16 +101,16 @@ void main() {
     final logits = List<double>.filled(1001, 0);
     expect(
       () => decodeClassificationOutput(logits, labels),
-      throwsA(isA<ClassificationException>()),
+      throwsA(isA<AnalysisException>()),
     );
     logits[1] = double.nan;
     expect(
       () => decodeClassificationOutput(logits, labels),
-      throwsA(isA<ClassificationException>()),
+      throwsA(isA<AnalysisException>()),
     );
     expect(
       () => decodeClassificationOutput([1], labels),
-      throwsA(isA<ClassificationException>()),
+      throwsA(isA<AnalysisException>()),
     );
   });
 }

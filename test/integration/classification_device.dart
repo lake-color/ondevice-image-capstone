@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 import 'package:integration_test/integration_test.dart';
-import 'package:ondevice_image_capstone/service/image_classifier.dart';
+import 'package:ondevice_image_capstone/domain/exceptions.dart';
 import 'package:ondevice_image_capstone/service/image_input_service.dart';
 import 'package:ondevice_image_capstone/service/mobilenet_classifier.dart';
 import 'package:path_provider/path_provider.dart';
@@ -33,7 +33,7 @@ void main() {
       await fixture.writeAsBytes([1, 2, 3]);
       await expectLater(
         classifier.classify(input),
-        throwsA(isA<ClassificationException>()),
+        throwsA(isA<AnalysisException>()),
       );
     },
   );
