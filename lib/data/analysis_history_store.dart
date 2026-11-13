@@ -106,8 +106,6 @@ class AnalysisHistoryStore extends ChangeNotifier {
     return entries;
   });
 
-  Future<void> clear() => _change((_) => []);
-
   void _notify() {
     if (!_disposed) notifyListeners();
   }
