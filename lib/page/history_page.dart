@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../app/app_theme.dart';
 import '../data/analysis_history_store.dart';
 import '../domain/analysis_history.dart';
 import '../domain/exceptions.dart';
 import '../service/share_service.dart';
+import 'notice_card.dart';
 
 const _trashAsset = 'assets/images/휴지통 아이콘.png';
 
@@ -193,7 +195,7 @@ class _HistoryCard extends StatelessWidget {
                 onPressed: onDelete,
                 style: TextButton.styleFrom(
                   foregroundColor: const Color(0xFFFF5D64),
-                  backgroundColor: const Color(0xFFFFEEEE),
+                  backgroundColor: AppColors.dangerSoft,
                   minimumSize: const Size(68, 34),
                   shape: const StadiumBorder(
                     side: BorderSide(color: Color(0xFFFFB4B8)),
@@ -237,48 +239,13 @@ class _EmptyHistory extends StatelessWidget {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Center(
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(22, 16, 16, 20),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFFBFB),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFFF6B72)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.centerRight,
-                child: IconButton.outlined(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close),
-                ),
-              ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFEEEE),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFFFC5C8)),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                  child: Text('빈이력', style: TextStyle(fontSize: 12)),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Text(
-                '아직 분석 이력이 없어요',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const Divider(height: 18),
-              const Text(
-                '분석을 완료하면 결과 텍스트와 처리 시간이 이곳에 저장됩니다.\n원본 사진은 저장하지 않아요.',
-              ),
-              const SizedBox(height: 20),
-              OutlinedButton(onPressed: onStart, child: const Text('사진 분석 시작')),
-            ],
-          ),
+        child: NoticeCard(
+          badge: '빈이력',
+          title: '아직 분석 이력이 없어요',
+          message: '분석을 완료하면 결과 텍스트와 처리 시간이 이곳에 저장됩니다.\n원본 사진은 저장하지 않아요.',
+          actionLabel: '사진 분석 시작',
+          onAction: onStart,
+          onClose: () => Navigator.pop(context),
         ),
       ),
     );

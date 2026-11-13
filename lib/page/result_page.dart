@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../app/app_theme.dart';
 import '../domain/analysis_result.dart';
 import '../service/share_service.dart';
 
@@ -33,7 +34,7 @@ class ResultPage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFABADB5)),
+                    border: Border.all(color: AppColors.borderStrong),
                   ),
                   child: Stack(
                     fit: StackFit.expand,
@@ -107,14 +108,14 @@ class _ResultCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFABADB5)),
+        border: Border.all(color: AppColors.borderStrong),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           DecoratedBox(
             decoration: BoxDecoration(
-              color: const Color(0xFFEAE8FF),
+              color: AppColors.primarySoft,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../app/app_router.dart';
+import '../app/app_theme.dart';
 import '../data/analysis_history_store.dart';
 import '../domain/analysis_result.dart';
 import '../domain/exceptions.dart';
 import '../service/analysis_service.dart';
+import 'notice_card.dart';
 
 const _analysisAsset = 'assets/images/분석 이미지.png';
 const _cancelAsset = 'assets/images/분석 취소 이미지.png';
@@ -82,12 +84,16 @@ class _LoadingPageState extends State<LoadingPage> {
                         ),
                       ],
                     )
-                  : _AnalysisError(
-                      onClose: () => Navigator.pop(context),
+                  : NoticeCard(
+                      badge: '분석 실패',
+                      title: '분석할 정보를 찾지 못했어요',
                       message: switch (_error) {
                         AnalysisException error => error.message,
-                        _ => null,
+                        _ => '다른 사진을 선택하거나 분석 방식을 바꿔보세요.',
                       },
+                      actionLabel: '다른 사진 분석',
+                      onAction: () => Navigator.pop(context),
+                      onClose: () => Navigator.pop(context),
                     ),
             ),
           ),
@@ -109,7 +115,7 @@ class _LoadingContent extends StatelessWidget {
       children: [
         DecoratedBox(
           decoration: BoxDecoration(
-            color: const Color(0xFFEAE8FF),
+            color: AppColors.primarySoft,
             borderRadius: BorderRadius.circular(30),
           ),
           child: const Padding(
@@ -145,69 +151,6 @@ class _LoadingContent extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _AnalysisError extends StatelessWidget {
-  const _AnalysisError({required this.onClose, this.message});
-
-  final VoidCallback onClose;
-  final String? message;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFFBFB),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFFFF6B72)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(22),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton.outlined(
-                onPressed: onClose,
-                icon: const Icon(Icons.close),
-              ),
-            ),
-            const _ErrorBadge(),
-            const SizedBox(height: 14),
-            Text(
-              '분석할 정보를 찾지 못했어요',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const Divider(height: 18),
-            Text(message ?? '다른 사진을 선택하거나 분석 방식을 바꿔보세요.'),
-            const SizedBox(height: 20),
-            OutlinedButton(onPressed: onClose, child: const Text('다른 사진 분석')),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ErrorBadge extends StatelessWidget {
-  const _ErrorBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFEEEE),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFFFC5C8)),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        child: Text('분석 실패', style: TextStyle(fontSize: 12)),
-      ),
     );
   }
 }

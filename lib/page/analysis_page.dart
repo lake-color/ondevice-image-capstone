@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../app/app_router.dart';
+import '../app/app_theme.dart';
 import '../domain/analysis_method.dart';
 import '../domain/exceptions.dart';
 import '../service/analysis_service.dart';
 import '../service/image_input_service.dart';
+import 'notice_card.dart';
 
 const _previewAsset = 'assets/images/미리보기 이미지.png';
 
@@ -59,6 +61,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
 
   Future<void> _selectImage(ImageSourceType source) async {
     setState(() => _isPicking = true);
+    var permissionDenied = false;
     try {
       final input = await widget.inputService.pick(source);
       if (mounted && input != null) {
@@ -66,7 +69,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
         if (mounted) setState(() => _input = input);
       }
     } on ImagePermissionDeniedException {
-      if (mounted) await _showPermissionDialog(source);
+      permissionDenied = true;
     } on ImageInputUnavailableException catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -75,6 +78,9 @@ class _AnalysisPageState extends State<AnalysisPage> {
     } finally {
       if (mounted) setState(() => _isPicking = false);
     }
+    // Shown after picking has ended so the spinner does not keep running
+    // behind the dialog.
+    if (permissionDenied && mounted) await _showPermissionDialog(source);
   }
 
   Future<void> _startAnalysis(AnalysisMethod method) async {
@@ -191,7 +197,7 @@ class _PhotoPicker extends StatelessWidget {
         color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(22),
-          side: const BorderSide(color: Color(0xFFABADB5), width: 1.2),
+          side: const BorderSide(color: AppColors.borderStrong, width: 1.2),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -264,7 +270,7 @@ class _AnalysisMethodButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
             side: BorderSide(
-              color: selected ? primary : const Color(0xFFD9DCE6),
+              color: selected ? primary : AppColors.border,
               width: selected ? 2 : 1,
             ),
           ),
@@ -278,7 +284,7 @@ class _AnalysisMethodButton extends StatelessWidget {
                   Text(
                     method.title,
                     style: const TextStyle(
-                      color: Color(0xFF151927),
+                      color: AppColors.text,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
                     ),
@@ -321,57 +327,14 @@ class _PermissionDialog extends StatelessWidget {
     };
     return Dialog(
       insetPadding: const EdgeInsets.all(14),
-      backgroundColor: const Color(0xFFFFFBFB),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: Color(0xFFFF6B72)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(22, 18, 16, 18),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.centerRight,
-              child: IconButton.outlined(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close),
-              ),
-            ),
-            const _StatusBadge(label: '권한 거부'),
-            const SizedBox(height: 12),
-            Text(title, style: Theme.of(context).textTheme.titleLarge),
-            const Divider(height: 18),
-            Text(body),
-            const SizedBox(height: 18),
-            OutlinedButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('설정에서 권한 열기'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFEEEE),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFFFC5C8)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-        child: Text(label, style: const TextStyle(fontSize: 12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: NoticeCard(
+        badge: '권한 거부',
+        title: title,
+        message: body,
+        actionLabel: '설정에서 권한 열기',
+        onAction: () => Navigator.pop(context),
+        onClose: () => Navigator.pop(context),
       ),
     );
   }
