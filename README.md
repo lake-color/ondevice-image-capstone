@@ -8,7 +8,7 @@ Android와 iOS를 대상으로 하며, 핵심 분석과 이력 관리는 서버 
 - 카메라 촬영·갤러리 선택 및 사진 미리보기
 - MobileNetV3 Small / LiteRT 기반 사물 분류와 신뢰도 표시
 - Google ML Kit 기반 한글·영어 OCR
-- 분석 결과·처리 시간 표시 및 클립보드 복사
+- 분석 결과·처리 시간 표시 및 OS 공유 시트로 결과 공유
 - 로컬 JSON 이력 저장·조회·삭제, 앱 재실행 후 복원
 - 권한·분석·저장 오류 안내와 이력 읽기·저장 재시도
 
@@ -35,7 +35,7 @@ lib/
   main.dart    앱 진입점
   app/         서비스 연결, 라우팅, 테마
   page/        시작·사진 선택·로딩·결과·이력 화면
-  service/     이미지 입력, OCR, 사물 분류, 결과 복사
+  service/     이미지 입력, OCR, 사물 분류, 결과 공유
   domain/      분석 방식·결과·이력 모델
   data/        로컬 이력 저장소
 assets/
@@ -45,6 +45,7 @@ test/
   unit/        단위 테스트
   widget/      화면·UI 테스트
   integration/ 기기 통합 테스트
+  support/     테스트 대역과 공통 준비 코드
 android/, ios/ 플랫폼 설정
 docs/
   STATUS.md    진행 현황·검증 기록·남은 작업
