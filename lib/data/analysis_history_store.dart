@@ -4,14 +4,8 @@ import 'package:flutter/foundation.dart';
 
 import '../domain/analysis_history.dart';
 import '../domain/analysis_result.dart';
+import '../domain/exceptions.dart';
 import 'history_storage.dart';
-
-class HistoryStorageException implements Exception {
-  const HistoryStorageException(this.message);
-  final String message;
-  @override
-  String toString() => message;
-}
 
 class AnalysisHistoryStore extends ChangeNotifier {
   AnalysisHistoryStore({HistoryStorage? storage})

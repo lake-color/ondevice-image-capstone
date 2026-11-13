@@ -1,17 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
 
+import '../domain/exceptions.dart';
+
 enum ImageSourceType { camera, gallery }
-
-class ImagePermissionDeniedException implements Exception {
-  const ImagePermissionDeniedException();
-}
-
-class ImageInputUnavailableException implements Exception {
-  const ImageInputUnavailableException(this.message);
-
-  final String message;
-}
 
 class ImageInput {
   const ImageInput({required this.name, required this.path});
@@ -53,9 +45,8 @@ class DeviceImageInputService implements ImageInputService {
       if (_permissionErrorCodes.contains(error.code)) {
         throw const ImagePermissionDeniedException();
       }
-      throw ImageInputUnavailableException(
-        error.message ?? '사진을 불러오지 못했습니다. 다시 시도해 주세요.',
-      );
+      // The platform message is untranslated and technical; do not show it.
+      throw const ImageInputUnavailableException();
     }
   }
 }

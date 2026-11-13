@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
+import '../domain/exceptions.dart';
 import 'classification_processing.dart';
 import 'image_classifier.dart';
 import 'image_input_service.dart';
@@ -25,7 +26,7 @@ class MobileNetClassifier implements ImageClassifier {
       );
     } catch (_) {
       _assets = null;
-      throw const ClassificationException('분류 모델을 불러오지 못했습니다. 앱을 다시 실행해 주세요.');
+      throw const AnalysisException('분류 모델을 불러오지 못했습니다. 앱을 다시 실행해 주세요.');
     }
   }
 
@@ -34,12 +35,10 @@ class MobileNetClassifier implements ImageClassifier {
     try {
       final (model, labels) = await (_assets ??= _loadAssets());
       return await compute(_classify, (model, labels, input.path));
-    } on ClassificationException {
+    } on AnalysisException {
       rethrow;
     } catch (_) {
-      throw const ClassificationException(
-        '사진을 분류하지 못했습니다. 다른 사진으로 다시 시도해 주세요.',
-      );
+      throw const AnalysisException('사진을 분류하지 못했습니다. 다른 사진으로 다시 시도해 주세요.');
     }
   }
 }
@@ -50,7 +49,7 @@ ClassificationOutput _classify((Uint8List, List<String>, String) request) {
   final (model, labels, path) = request;
   final file = File(path);
   if (file.lengthSync() > 32 * 1024 * 1024) {
-    throw const ClassificationException('사진 파일이 너무 큽니다. 32MB 이하 사진을 선택해 주세요.');
+    throw const AnalysisException('사진 파일이 너무 큽니다. 32MB 이하 사진을 선택해 주세요.');
   }
   final input = prepareClassificationInput(file.readAsBytesSync());
   final options = InterpreterOptions()..threads = 2;
@@ -65,7 +64,7 @@ ClassificationOutput _classify((Uint8List, List<String>, String) request) {
         outputs.single.type != TensorType.float32 ||
         !listEquals(inputs.single.shape, [1, 224, 224, 3]) ||
         !listEquals(outputs.single.shape, [1, classificationLabelCount])) {
-      throw const ClassificationException('분류 모델의 입력·출력 사양이 올바르지 않습니다.');
+      throw const AnalysisException('분류 모델의 입력·출력 사양이 올바르지 않습니다.');
     }
     final output = [List<double>.filled(classificationLabelCount, 0)];
     interpreter.run(input.buffer, output);

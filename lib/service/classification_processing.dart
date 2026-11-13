@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:image/image.dart' as img;
 
+import '../domain/exceptions.dart';
 import 'image_classifier.dart';
 
 const classificationInputSize = 224;
@@ -13,7 +14,7 @@ List<String> parseClassificationLabels(String source) {
   if (labels.length != classificationLabelCount ||
       labels.first != 'background' ||
       labels.any((label) => label.trim().isEmpty)) {
-    throw const ClassificationException('분류 모델의 라벨 구성이 올바르지 않습니다.');
+    throw const AnalysisException('분류 모델의 라벨 구성이 올바르지 않습니다.');
   }
   return labels;
 }
@@ -23,18 +24,16 @@ Float32List prepareClassificationInput(Uint8List encoded) {
   final decoder = img.findDecoderForData(encoded);
   final info = decoder?.startDecode(encoded);
   if (info == null) {
-    throw const ClassificationException(
+    throw const AnalysisException(
       '지원하지 않거나 손상된 사진입니다. JPG 또는 PNG 사진으로 다시 시도해 주세요.',
     );
   }
   if (info.width * info.height > 40000000) {
-    throw const ClassificationException(
-      '사진 해상도가 너무 큽니다. 4천만 화소 이하 사진을 선택해 주세요.',
-    );
+    throw const AnalysisException('사진 해상도가 너무 큽니다. 4천만 화소 이하 사진을 선택해 주세요.');
   }
   final decoded = decoder!.decodeFrame(0);
   if (decoded == null) {
-    throw const ClassificationException('사진을 읽지 못했습니다. 다른 사진으로 다시 시도해 주세요.');
+    throw const AnalysisException('사진을 읽지 못했습니다. 다른 사진으로 다시 시도해 주세요.');
   }
   final oriented = img.bakeOrientation(decoded);
   final side = math.min(oriented.width, oriented.height);
@@ -75,16 +74,14 @@ ClassificationOutput decodeClassificationOutput(
   if (logits.length != classificationLabelCount ||
       labels.length != logits.length ||
       logits.any((value) => !value.isFinite)) {
-    throw const ClassificationException('분류 결과를 읽지 못했습니다. 다시 시도해 주세요.');
+    throw const AnalysisException('분류 결과를 읽지 못했습니다. 다시 시도해 주세요.');
   }
   var best = 0;
   for (var i = 1; i < logits.length; i++) {
     if (logits[i] > logits[best]) best = i;
   }
   if (best == 0) {
-    throw const ClassificationException(
-      '뚜렷한 사물을 찾지 못했습니다. 사물이 중앙에 보이는 사진을 선택해 주세요.',
-    );
+    throw const AnalysisException('뚜렷한 사물을 찾지 못했습니다. 사물이 중앙에 보이는 사진을 선택해 주세요.');
   }
   final maximum = logits[best];
   final denominator = logits.fold<double>(

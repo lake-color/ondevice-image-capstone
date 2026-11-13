@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../data/analysis_history_store.dart';
 import '../domain/analysis_history.dart';
+import '../domain/exceptions.dart';
 import '../service/share_service.dart';
 
 const _trashAsset = 'assets/images/휴지통 아이콘.png';

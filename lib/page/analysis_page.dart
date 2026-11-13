@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../app/app_router.dart';
 import '../domain/analysis_method.dart';
+import '../domain/exceptions.dart';
 import '../service/analysis_service.dart';
 import '../service/image_input_service.dart';
 
@@ -65,7 +66,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
         if (mounted) setState(() => _input = input);
       }
     } on ImagePermissionDeniedException {
-      if (mounted) await _showPermissionDialog();
+      if (mounted) await _showPermissionDialog(source);
     } on ImageInputUnavailableException catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -86,10 +87,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
     );
   }
 
-  Future<void> _showPermissionDialog() {
+  Future<void> _showPermissionDialog(ImageSourceType source) {
     return showDialog<void>(
       context: context,
-      builder: (context) => const _PermissionDialog(),
+      builder: (context) => _PermissionDialog(source: source),
     );
   }
 
@@ -299,10 +300,25 @@ class _AnalysisMethodButton extends StatelessWidget {
 }
 
 class _PermissionDialog extends StatelessWidget {
-  const _PermissionDialog();
+  const _PermissionDialog({required this.source});
+
+  /// The source whose access was denied; decides which wording is shown.
+  final ImageSourceType source;
 
   @override
   Widget build(BuildContext context) {
+    final (title, body) = switch (source) {
+      ImageSourceType.camera => (
+        '카메라 권한이 필요해요',
+        '사진을 촬영하려면 카메라 접근이 필요합니다.\n'
+            '권한을 허용하지 않아도 갤러리 선택은 계속 사용할 수 있어요.',
+      ),
+      ImageSourceType.gallery => (
+        '사진 접근 권한이 필요해요',
+        '갤러리에서 사진을 선택하려면 사진 접근이 필요합니다.\n'
+            '권한을 허용하지 않아도 카메라 촬영은 계속 사용할 수 있어요.',
+      ),
+    };
     return Dialog(
       insetPadding: const EdgeInsets.all(14),
       backgroundColor: const Color(0xFFFFFBFB),
@@ -325,11 +341,9 @@ class _PermissionDialog extends StatelessWidget {
             ),
             const _StatusBadge(label: '권한 거부'),
             const SizedBox(height: 12),
-            Text('카메라 권한이 필요해요', style: Theme.of(context).textTheme.titleLarge),
+            Text(title, style: Theme.of(context).textTheme.titleLarge),
             const Divider(height: 18),
-            const Text(
-              '사진을 촬영하려면 카메라 접근이 필요합니다.\n권한을 허용하지 않아도 갤러리 선택은 계속 사용할 수 있어요.',
-            ),
+            Text(body),
             const SizedBox(height: 18),
             OutlinedButton(
               onPressed: () => Navigator.pop(context),

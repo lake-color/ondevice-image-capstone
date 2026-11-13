@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../app/app_router.dart';
 import '../data/analysis_history_store.dart';
 import '../domain/analysis_result.dart';
+import '../domain/exceptions.dart';
 import '../service/analysis_service.dart';
-import '../service/image_classifier.dart';
-import '../service/ocr_analyzer.dart';
 
 const _analysisAsset = 'assets/images/분석 이미지.png';
 const _cancelAsset = 'assets/images/분석 취소 이미지.png';
@@ -86,8 +85,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   : _AnalysisError(
                       onClose: () => Navigator.pop(context),
                       message: switch (_error) {
-                        ClassificationException error => error.message,
-                        OcrRecognitionException error => error.message,
+                        AnalysisException error => error.message,
                         _ => null,
                       },
                     ),

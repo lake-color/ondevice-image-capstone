@@ -9,10 +9,3 @@ class ClassificationOutput {
 abstract interface class ImageClassifier {
   Future<ClassificationOutput> classify(ImageInput input);
 }
-
-class ClassificationException implements Exception {
-  const ClassificationException(this.message);
-  final String message;
-  @override
-  String toString() => message;
-}
