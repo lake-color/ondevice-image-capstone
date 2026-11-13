@@ -25,7 +25,7 @@ class _AppState extends State<App> {
     _historyStore = AnalysisHistoryStore();
     _historyStore.load();
     _router = AppRouter(
-      inputService: DeviceImageInputService(),
+      inputService: ImageInputService(),
       analysisService: AnalysisService(
         const MlKitOcrAnalyzer(),
         MobileNetClassifier(),

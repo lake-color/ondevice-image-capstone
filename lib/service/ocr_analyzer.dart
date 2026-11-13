@@ -3,14 +3,9 @@ import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart
 import '../domain/exceptions.dart';
 import 'image_input_service.dart';
 
-abstract interface class OcrAnalyzer {
-  Future<String> recognize(ImageInput input);
-}
-
-class MlKitOcrAnalyzer implements OcrAnalyzer {
+class MlKitOcrAnalyzer {
   const MlKitOcrAnalyzer();
 
-  @override
   Future<String> recognize(ImageInput input) async {
     final recognizer = TextRecognizer(script: TextRecognitionScript.korean);
     try {

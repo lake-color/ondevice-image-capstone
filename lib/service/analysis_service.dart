@@ -1,8 +1,8 @@
 import '../domain/analysis_method.dart';
 import '../domain/analysis_result.dart';
 import 'image_input_service.dart';
+import 'mobilenet_classifier.dart';
 import 'ocr_analyzer.dart';
-import 'image_classifier.dart';
 
 class AnalysisRequest {
   const AnalysisRequest({required this.method, required this.input});
@@ -14,8 +14,8 @@ class AnalysisRequest {
 class AnalysisService {
   const AnalysisService(this._ocr, this._classifier);
 
-  final OcrAnalyzer _ocr;
-  final ImageClassifier _classifier;
+  final MlKitOcrAnalyzer _ocr;
+  final MobileNetClassifier _classifier;
 
   Future<AnalysisResult> analyze(AnalysisRequest request) async {
     final stopwatch = Stopwatch()..start();
@@ -44,9 +44,6 @@ class AnalysisService {
 
   Future<(String, String, double?)> _classify(ImageInput input) async {
     final output = await _classifier.classify(input);
-    // The model's apple class is named after a cultivar; it cannot establish
-    // the actual cultivar of an arbitrary apple photo.
-    final label = output.label == 'Granny Smith' ? '사과' : output.label;
-    return ('분류 결과', label, output.confidence);
+    return ('분류 결과', output.label, output.confidence);
   }
 }

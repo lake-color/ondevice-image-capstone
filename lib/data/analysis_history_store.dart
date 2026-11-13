@@ -8,10 +8,10 @@ import '../domain/exceptions.dart';
 import 'history_storage.dart';
 
 class AnalysisHistoryStore extends ChangeNotifier {
-  AnalysisHistoryStore({HistoryStorage? storage})
+  AnalysisHistoryStore({FileHistoryStorage? storage})
     : _storage = storage ?? FileHistoryStorage();
 
-  final HistoryStorage _storage;
+  final FileHistoryStorage _storage;
   List<AnalysisHistory> _entries = [];
   Future<void> _pending = Future.value();
   bool _loaded = false;
