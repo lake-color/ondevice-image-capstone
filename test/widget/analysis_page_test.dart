@@ -40,6 +40,16 @@ Future<List<RouteSettings>> pumpAnalysisPage(
   return requested;
 }
 
+/// Records which photos the page asks to discard instead of deleting files.
+class RecordingInputService extends ImageInputService {
+  RecordingInputService(FakePicker picker) : super(imagePicker: picker);
+
+  final discarded = <String>[];
+
+  @override
+  Future<void> discard(ImageInput input) async => discarded.add(input.path);
+}
+
 /// Opens the source sheet with the main button, whatever its label, and
 /// chooses [option].
 Future<void> pickFrom(WidgetTester tester, String option) async {
@@ -232,5 +242,35 @@ void main() {
     final request = settings.arguments! as AnalysisRequest;
     expect(request.method, AnalysisMethod.ocr);
     expect(request.input.path, file.path);
+  });
+
+  testWidgets('a photo is discarded when replaced and on leaving the page', (
+    tester,
+  ) async {
+    final picker = FakePicker(file: XFile('/tmp/first.jpg'));
+    final service = RecordingInputService(picker);
+    await tester.binding.setSurfaceSize(const Size(800, 1400));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.light,
+        home: AnalysisPage(inputService: service),
+      ),
+    );
+
+    await pickFrom(tester, '갤러리에서 선택');
+    expect(service.discarded, isEmpty);
+
+    picker.file = XFile('/tmp/second.jpg');
+    await pickFrom(tester, '갤러리에서 선택');
+    expect(service.discarded, [XFile('/tmp/first.jpg').path]);
+
+    // A cancelled pick keeps the current photo.
+    picker.file = null;
+    await pickFrom(tester, '갤러리에서 선택');
+    expect(service.discarded, hasLength(1));
+
+    await tester.pumpWidget(const SizedBox());
+    expect(service.discarded.last, XFile('/tmp/second.jpg').path);
   });
 }

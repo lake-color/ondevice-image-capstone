@@ -13,9 +13,9 @@ fvm flutter test
 | `unit/analysis_result_test.dart` | 저장 JSON 필드, 이전 버전 데이터 호환, 공유 문구 |
 | `unit/analysis_history_store_test.dart` | 파일 저장·재열기·삭제, 파일 형식, ID 중복 방지, 저장·읽기 실패와 재시도, 손상 파일 보존 |
 | `unit/analysis_service_test.dart` | OCR·분류 분기, 모델 라벨과 신뢰도를 변환 없이 전달, 예외 전달 |
-| `unit/image_input_service_test.dart` | 카메라·갤러리 구분, 선택 취소, 권한 거부와 기타 입력 오류 |
+| `unit/image_input_service_test.dart` | 카메라·갤러리 구분, 선택 취소, 권한 거부와 기타 입력 오류, 임시 사본 삭제 |
 | `unit/mobilenet_classifier_test.dart` | 라벨 구성, 전처리(정규화·중앙 자르기·투명 배경·EXIF 방향), 후처리(softmax·잘못된 출력) |
-| `widget/analysis_page_test.dart` | 권한 설명 문구, 카메라·갤러리 사진 표시, 선택 취소, 권한 거부 안내·닫기·설정 열기와 실패, 입력 오류 안내, 사진 선택 전 분석 불가, 분석 요청 전달 |
+| `widget/analysis_page_test.dart` | 권한 설명 문구, 카메라·갤러리 사진 표시, 선택 취소, 권한 거부 안내·닫기·설정 열기와 실패, 입력 오류 안내, 사진 선택 전 분석 불가, 분석 요청 전달, 사진 교체·화면 종료 시 임시 사본 폐기 |
 | `widget/loading_page_test.dart` | 분석 후 저장과 결과 이동, 분석 실패 안내, 저장 실패 재시도, 분석 취소 |
 | `widget/result_page_test.dart` | 결과·신뢰도 표시, 낮은 신뢰도 안내, OS 공유 시트 호출과 실패 안내 |
 | `widget/history_page_test.dart` | 목록 표시, 삭제 확인과 실패, 빈 이력, 최근 항목 공유, 읽기 실패 재시도 |

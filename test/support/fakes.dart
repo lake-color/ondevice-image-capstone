@@ -71,7 +71,7 @@ class MemoryStorage implements FileHistoryStorage {
 class FakePicker extends Fake implements ImagePicker {
   FakePicker({this.file, this.error});
 
-  final XFile? file;
+  XFile? file;
   final PlatformException? error;
   ImageSource? lastSource;
 

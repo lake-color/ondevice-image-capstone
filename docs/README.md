@@ -6,9 +6,9 @@
 | [기술 구성](technical/ARCHITECTURE.md) | 기술 스택, 코드 구조, 분석 흐름, 로컬 저장 정책 |
 | [이미지 분류](technical/IMAGE_CLASSIFICATION.md) | 모델 출처·해시·입출력 사양과 전처리 |
 | [디자인 자료](design/README.md) | 참고 화면과 기존 UI 검토 범위 |
-| [개인정보 제출물](submission/PRIVACY.md) | 작성 예정 |
-| [프롬프트 기록 제출물](submission/prompts_log.md) | 작성 예정 |
-| [스크린샷 제출 폴더](submission/screenshots/) | 기존 캡처 삭제, 제출용 화면 촬영 예정 |
+| [MP1 제출물](submission/MP1/README.md) | 카메라·갤러리 입력과 권한 처리. 앱 소스, 스크린샷, 프롬프트 기록 포함 |
+| [MP2 제출물](submission/MP2/README.md) | 온디바이스 텍스트 인식과 처리 시간. 앱 소스, 스크린샷, 프롬프트 기록 포함 |
+| [MP3 제출물](submission/MP3/README.md) | 이력·공유가 포함된 최종 앱. 앱 소스, [PRIVACY.md](submission/MP3/PRIVACY.md), 스크린샷, 프롬프트 기록 포함 |
 
 실행 방법은 [루트 README](../README.md), 테스트 명령은
 [테스트 안내](../test/README.md)를 기준으로 합니다.

@@ -3,7 +3,10 @@
          runtime. The gallery uses the system photo picker and needs none. -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <!-- allowBackup is off so the analysis history stays on this device and is
+         not copied to the user's cloud backup. -->
     <application
+        android:allowBackup="false"
         android:label="ondevice_image_capstone"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

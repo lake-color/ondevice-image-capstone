@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,14 @@ class _AnalysisPageState extends State<AnalysisPage> {
   ImageInput? _input;
   AnalysisMethod _selectedMethod = AnalysisMethod.imageClassification;
   bool _isPicking = false;
+
+  @override
+  void dispose() {
+    // Leaving the page ends the session for this photo.
+    final input = _input;
+    if (input != null) unawaited(widget.inputService.discard(input));
+    super.dispose();
+  }
 
   Future<void> _showSourcePicker() async {
     if (_isPicking) return;
@@ -68,7 +77,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
       final input = await widget.inputService.pick(source);
       if (mounted && input != null) {
         await FileImage(File(input.path)).evict();
+        final previous = _input;
         if (mounted) setState(() => _input = input);
+        // Not awaited: the spinner should not wait for file cleanup.
+        if (previous != null) unawaited(widget.inputService.discard(previous));
       }
     } on ImagePermissionDeniedException {
       permissionDenied = true;
