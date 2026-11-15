@@ -13,7 +13,10 @@ class MlKitOcrAnalyzer {
       final result = await recognizer.processImage(image);
       final text = result.text.trim();
       if (text.isEmpty) {
-        throw const AnalysisException('사진에서 인식할 텍스트를 찾지 못했습니다.');
+        throw const AnalysisException(
+          '사진에서 인식할 텍스트를 찾지 못했습니다.\n'
+          '글자가 또렷하게 보이는 사진으로 다시 시도해 주세요.',
+        );
       }
       return text;
     } on AnalysisException {

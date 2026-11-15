@@ -85,7 +85,9 @@ class _LoadingPageState extends State<LoadingPage> {
                       ],
                     )
                   : NoticeCard(
-                      badge: '분석 실패',
+                      // A photo the model cannot read is a normal outcome,
+                      // not a fault, so it is worded as guidance.
+                      badge: _error is AnalysisException ? '인식 불가' : '분석 실패',
                       title: '분석할 정보를 찾지 못했어요',
                       message: switch (_error) {
                         AnalysisException error => error.message,

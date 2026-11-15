@@ -45,6 +45,13 @@ fvm flutter drive --driver=test/integration/driver.dart --target=test/integratio
 fvm flutter drive --driver=test/integration/driver.dart --target=test/integration/recognition_quality_device.dart -d <device-id>
 ```
 
+처리 시간 측정(텍스트 인식·사물 분류 각 10회, 출력의 `TIMING` 줄). 네트워크 없이 동작하며
+프로파일 빌드에서 측정합니다:
+
+```sh
+fvm flutter drive --profile --driver=test/integration/driver.dart --target=test/integration/processing_time_device.dart -d <device-id>
+```
+
 품질 테스트는 사진 다운로드에 네트워크가 필요합니다. 빨간 사과를 석류로
 오분류하여 실패한 기록이 있으며, 상세 내용은
 [진행 현황](../docs/STATUS.md)를 참고하세요.

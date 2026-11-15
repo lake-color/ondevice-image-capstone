@@ -59,7 +59,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(NoticeCard), findsOneWidget);
-    expect(find.text('분석 실패'), findsOneWidget);
+    expect(find.text('인식 불가'), findsOneWidget);
     expect(find.text('사진에서 인식할 텍스트를 찾지 못했습니다.'), findsOneWidget);
     expect(store.entries, isEmpty);
 
