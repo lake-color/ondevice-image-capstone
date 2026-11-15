@@ -1,0 +1,30 @@
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+
+import '../domain/exceptions.dart';
+import 'image_input_service.dart';
+
+class MlKitOcrAnalyzer {
+  const MlKitOcrAnalyzer();
+
+  Future<String> recognize(ImageInput input) async {
+    final recognizer = TextRecognizer(script: TextRecognitionScript.korean);
+    try {
+      final image = InputImage.fromFilePath(input.path);
+      final result = await recognizer.processImage(image);
+      final text = result.text.trim();
+      if (text.isEmpty) {
+        throw const AnalysisException(
+          '사진에서 인식할 텍스트를 찾지 못했습니다.\n'
+          '글자가 또렷하게 보이는 사진으로 다시 시도해 주세요.',
+        );
+      }
+      return text;
+    } on AnalysisException {
+      rethrow;
+    } catch (_) {
+      throw const AnalysisException('텍스트를 인식하지 못했습니다. 다른 사진으로 다시 시도해 주세요.');
+    } finally {
+      await recognizer.close();
+    }
+  }
+}

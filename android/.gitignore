@@ -1,5 +1,8 @@
 gradle-wrapper.jar
 /.gradle
+/.kotlin/
+# Gradle writes its problems report here even though build output is redirected.
+/build/
 /captures/
 /gradlew
 /gradlew.bat

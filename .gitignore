@@ -49,3 +49,35 @@ app.*.map.json
 
 # FVM local SDK cache and generated files
 .fvm/
+
+# Local environment files; only sanitized templates should be committed.
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# Credentials and local cloud configuration
+.aws/
+.azure/
+.config/gcloud/
+credentials.json
+credentials.*.json
+service-account*.json
+service_account*.json
+serviceAccount*.json
+*-firebase-adminsdk-*.json
+
+# Private keys and signing material
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ed25519
+key.properties
+
+# Course handout (not part of the project)
+docs/submission/*.pdf
