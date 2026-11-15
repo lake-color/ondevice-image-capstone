@@ -21,7 +21,7 @@ class AnalysisResult {
   final DateTime createdAt;
   final double? confidence;
 
-  /// Only used for the current preview; never serialized into history.
+  /// Only used to show the photo next to this result; never saved.
   final String? imagePath;
 
   Map<String, Object?> toJson() => {

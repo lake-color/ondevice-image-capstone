@@ -78,3 +78,6 @@ serviceAccount*.json
 id_rsa
 id_ed25519
 key.properties
+
+# Course handout (not part of the project)
+docs/submission/*.pdf

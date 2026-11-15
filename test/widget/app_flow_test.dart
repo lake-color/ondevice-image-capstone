@@ -32,7 +32,7 @@ void main() {
 
       // Photo selection.
       expect(find.text('사진 선택'), findsOneWidget);
-      await tester.tap(find.text('다른 사진 선택'));
+      await tester.tap(find.text('사진 가져오기'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('갤러리에서 선택'));
       await tester.pumpAndSettle();

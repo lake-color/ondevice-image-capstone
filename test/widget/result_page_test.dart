@@ -63,8 +63,8 @@ void main() {
     expect(find.text('텍스트 분석 결과를 확인하세요.'), findsOneWidget);
     expect(find.text('안녕하세요\nHello'), findsOneWidget);
     expect(find.text('인식 신뢰도'), findsNothing);
-    // History entries carry no photo path.
-    expect(find.text('원본 사진은 이력에 저장되지 않습니다.'), findsOneWidget);
+    // A result without a photo path, such as one read back from history.
+    expect(find.text('원본 사진은 저장하지 않습니다.'), findsOneWidget);
   });
 
   testWidgets('share opens the OS share sheet with the result text', (

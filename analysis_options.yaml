@@ -5,3 +5,5 @@ analyzer:
     - build/**
     - android/**
     - ios/**
+    # Stage submissions are separate Flutter projects with their own packages.
+    - docs/submission/**

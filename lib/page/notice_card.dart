@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../app/app_theme.dart';
 
-/// Red-outlined card for states that stop the normal flow: denied permission,
-/// failed analysis and empty history. All three share the same layout and
-/// differ only in wording and in what the buttons do.
+/// Red-outlined card for a state that stops the normal flow, such as a denied
+/// permission. Every use shares this layout and differs only in wording and
+/// in what the buttons do.
 class NoticeCard extends StatelessWidget {
   const NoticeCard({
     super.key,

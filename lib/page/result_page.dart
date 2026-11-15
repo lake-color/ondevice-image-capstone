@@ -48,7 +48,7 @@ class ResultPage extends StatelessWidget {
                               const Center(child: Text('원본 사진을 불러올 수 없습니다.')),
                         )
                       else
-                        const Center(child: Text('원본 사진은 이력에 저장되지 않습니다.')),
+                        const Center(child: Text('원본 사진은 저장하지 않습니다.')),
                       const Align(
                         alignment: Alignment.bottomCenter,
                         child: ColoredBox(

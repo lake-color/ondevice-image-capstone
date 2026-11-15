@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart' as image_picker;
 
@@ -13,8 +14,11 @@ class ImageInput {
 }
 
 class ImageInputService {
-  ImageInputService({image_picker.ImagePicker? imagePicker})
-    : _imagePicker = imagePicker ?? image_picker.ImagePicker();
+  ImageInputService({
+    image_picker.ImagePicker? imagePicker,
+    Future<void> Function()? openSettings,
+  }) : _imagePicker = imagePicker ?? image_picker.ImagePicker(),
+       _openSettings = openSettings ?? AppSettings.openAppSettings;
 
   static const _permissionErrorCodes = {
     'camera_access_denied',
@@ -24,6 +28,12 @@ class ImageInputService {
   };
 
   final image_picker.ImagePicker _imagePicker;
+  final Future<void> Function() _openSettings;
+
+  /// Opens this app's page in the OS settings, where a denied permission can
+  /// be granted again. Once access is denied the OS stops asking, so this is
+  /// the only way back.
+  Future<void> openPermissionSettings() => _openSettings();
 
   Future<ImageInput?> pick(ImageSourceType source) async {
     try {

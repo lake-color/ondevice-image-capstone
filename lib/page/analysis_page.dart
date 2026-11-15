@@ -43,11 +43,13 @@ class _AnalysisPageState extends State<AnalysisPage> {
               ListTile(
                 leading: const Icon(Icons.photo_camera_outlined),
                 title: const Text('카메라로 촬영'),
+                subtitle: const Text('촬영을 위해 카메라 권한을 요청해요. 사진은 기기 안에서만 사용합니다.'),
                 onTap: () => Navigator.pop(context, ImageSourceType.camera),
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library_outlined),
                 title: const Text('갤러리에서 선택'),
+                subtitle: const Text('직접 고른 사진 한 장만 앱에 전달됩니다.'),
                 onTap: () => Navigator.pop(context, ImageSourceType.gallery),
               ),
             ],
@@ -96,7 +98,10 @@ class _AnalysisPageState extends State<AnalysisPage> {
   Future<void> _showPermissionDialog(ImageSourceType source) {
     return showDialog<void>(
       context: context,
-      builder: (context) => _PermissionDialog(source: source),
+      builder: (context) => _PermissionDialog(
+        source: source,
+        onOpenSettings: widget.inputService.openPermissionSettings,
+      ),
     );
   }
 
@@ -127,6 +132,15 @@ class _AnalysisPageState extends State<AnalysisPage> {
                   isLoading: _isPicking,
                   onTap: _showSourcePicker,
                 ),
+                if (_input != null) ...[
+                  const SizedBox(height: 14),
+                  Text(
+                    _input!.name,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
                 const SizedBox(height: 26),
                 Row(
                   children: AnalysisMethod.values.reversed
@@ -154,7 +168,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
                 const SizedBox(height: 22),
                 FilledButton(
                   onPressed: _isPicking ? null : _showSourcePicker,
-                  child: const Text('다른 사진 선택'),
+                  child: Text(_input == null ? '사진 가져오기' : '다른 사진 선택'),
                 ),
                 const SizedBox(height: 14),
                 OutlinedButton(
@@ -306,10 +320,25 @@ class _AnalysisMethodButton extends StatelessWidget {
 }
 
 class _PermissionDialog extends StatelessWidget {
-  const _PermissionDialog({required this.source});
+  const _PermissionDialog({required this.source, required this.onOpenSettings});
 
   /// The source whose access was denied; decides which wording is shown.
   final ImageSourceType source;
+  final Future<void> Function() onOpenSettings;
+
+  Future<void> _openSettings(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    Navigator.pop(context);
+    try {
+      await onOpenSettings();
+    } catch (_) {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('설정을 열지 못했습니다. 기기 설정에서 앱 권한을 직접 변경해 주세요.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -317,12 +346,14 @@ class _PermissionDialog extends StatelessWidget {
       ImageSourceType.camera => (
         '카메라 권한이 필요해요',
         '사진을 촬영하려면 카메라 접근이 필요합니다.\n'
-            '권한을 허용하지 않아도 갤러리 선택은 계속 사용할 수 있어요.',
+            '설정 > 권한 > 카메라에서 허용할 수 있어요.\n'
+            '허용하지 않아도 갤러리 선택은 계속 사용할 수 있습니다.',
       ),
       ImageSourceType.gallery => (
         '사진 접근 권한이 필요해요',
         '갤러리에서 사진을 선택하려면 사진 접근이 필요합니다.\n'
-            '권한을 허용하지 않아도 카메라 촬영은 계속 사용할 수 있어요.',
+            '설정 > 권한 > 사진에서 허용할 수 있어요.\n'
+            '허용하지 않아도 카메라 촬영은 계속 사용할 수 있습니다.',
       ),
     };
     return Dialog(
@@ -333,7 +364,7 @@ class _PermissionDialog extends StatelessWidget {
         title: title,
         message: body,
         actionLabel: '설정에서 권한 열기',
-        onAction: () => Navigator.pop(context),
+        onAction: () => _openSettings(context),
         onClose: () => Navigator.pop(context),
       ),
     );
