@@ -373,13 +373,13 @@ adb shell am force-stop com.example.ondevice_image_capstone
 
 - 조작: 텍스트 분석과 사물 분석을 한 번씩 실행한 뒤 사진 선택 화면의 **분석 이력 보기**를 연다. 앱을 강제 종료(`adb shell am force-stop com.example.ondevice_image_capstone`)하고 다시 실행해 이력을 연다. 한 항목의 **삭제**를 누르고 확인한다
 - 기대 결과: 두 결과가 최신순으로 표시되고, 재시작 후에도 그대로 남으며, 삭제한 항목만 목록에서 사라진다
-- 스크린샷: 06_result_saved.png, 08_history_list.png, 10_history_after_restart.png, 11_delete_confirm.png, 12_history_after_delete.png
+- 스크린샷: 09_history_after_restart.png, 10_history_after_delete.png
 
 ### 공유 시트
 
 - 조작: 결과 화면과 이력 화면에서 각각 **결과 공유하기**를 누른다
 - 기대 결과: OS 공유 시트가 열리고, 전달 내용에 사진 없이 결과 텍스트와 처리 시간만 표시된다
-- 스크린샷: 07_share_sheet_from_result.png, 09_share_sheet_from_history.png
+- 스크린샷: 08_share_sheet_from_result.png
 
 ### PRIVACY.md 저장/비저장 항목
 
@@ -468,22 +468,20 @@ Pixel 9 Pro 에뮬레이터(Android 16, x86_64)에서 각 단계의 앱으로 �
 ## 스크린샷
 
 `docs/submission/MP3/screenshots/` 한 폴더에 화면 순서대로 번호를 붙여 모았습니다. 모두 PNG이고 한 장에 2MB를 넘지 않습니다.
-제출 규칙의 12장 제한에 맞춰, 앞 단계 화면은 이력에 저장되는 분석 결과와 오프라인 동작을 보여주는 5장만 남겼습니다. 나머지 앞 단계 화면은 MP1·MP2 제출물에 있습니다.
+단계마다 그 단계 평가 기준에 필요한 화면만 골라 앞 단계 화면 뒤에 더합니다(MP1 4장, MP2 7장, MP3 10장).
 
 | 파일 | 단계 | 내용 |
 |---|---|---|
-| `01_photo_source_sheet.png` | MP1 | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
-| `02_text_analysis_result.png` | MP2 | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
-| `03_object_analysis_result.png` | MP2 | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
-| `04_airplane_mode_text_result.png` | MP2 | 비행기 모드에서 같은 사진을 분석한 결과 |
-| `05_airplane_mode_unrecognizable_notice.png` | MP2 | 그 사진을 분석했을 때의 인식 불가 안내 |
-| `06_result_saved.png` | MP3 | 분석 결과 화면 — 결과가 이력에 저장됨 |
-| `07_share_sheet_from_result.png` | MP3 | 결과 화면의 "결과 공유하기"로 연 공유 시트 |
-| `08_history_list.png` | MP3 | 분석 이력 목록 |
-| `09_share_sheet_from_history.png` | MP3 | 이력 화면의 "결과 공유하기"로 연 공유 시트 |
-| `10_history_after_restart.png` | MP3 | 앱을 강제 종료하고 다시 실행한 뒤에도 유지된 이력 |
-| `11_delete_confirm.png` | MP3 | 이력 삭제 확인 대화상자 |
-| `12_history_after_delete.png` | MP3 | 삭제 후 이력 목록 |
+| `01_permission_denied_notice.png` | MP1 | 카메라 권한을 거부했을 때의 안내 화면(설정 경로 안내와 "설정에서 권한 열기" 버튼) |
+| `02_camera_photo_displayed.png` | MP1 | 권한 허용 후 카메라로 촬영한 사진 표시 |
+| `03_gallery_photo_displayed.png` | MP1 | 갤러리에서 고른 사진 표시 |
+| `04_picker_cancelled.png` | MP1 | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
+| `05_text_analysis_result.png` | MP2 | 텍스트 분석 결과(원본 사진, 인식한 텍스트, 처리 시간) |
+| `06_airplane_mode_text_result.png` | MP2 | 비행기 모드에서 같은 사진을 분석한 결과 |
+| `07_airplane_mode_unrecognizable_notice.png` | MP2 | 비행기 모드에서 글자가 없는 사진을 분석했을 때의 인식 불가 안내 |
+| `08_share_sheet_from_result.png` | MP3 | 결과 화면의 "결과 공유하기"로 연 공유 시트(결과 텍스트만 전달) |
+| `09_history_after_restart.png` | MP3 | 분석 결과가 저장된 이력 목록 — 앱을 강제 종료하고 다시 실행한 뒤에도 유지됨 |
+| `10_history_after_delete.png` | MP3 | 삭제 후 이력 목록 |
 
 ## 민감정보
 

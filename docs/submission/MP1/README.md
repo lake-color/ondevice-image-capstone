@@ -36,7 +36,7 @@ app/                 이미지 입력 앱 소스
   test/              단위·위젯 테스트 15개
   android/, ios/     플랫폼 설정과 권한 선언
 README.md            이 문서
-screenshots/         화면 캡처 7장(화면 순서대로 번호)
+screenshots/         화면 캡처 4장(화면 순서대로 번호)
 prompts_log.md       AI 도구와의 논의에서 정한 결정 사항
 ```
 
@@ -145,19 +145,19 @@ adb shell pm clear-permission-flags com.example.ondevice_image_capstone android.
 
 - 조작: **시작하기** → **사진 가져오기** → **카메라로 촬영**으로 촬영한다. 다시 **사진 가져오기** → **갤러리에서 선택**으로 이미지를 고른다
 - 기대 결과: 고르기 시트에 권한이 필요한 이유가 보이고, 촬영하거나 고른 사진이 화면 중앙에, 파일 이름이 그 아래에 표시된다
-- 스크린샷: 01_photo_source_sheet.png, 05_camera_photo_displayed.png, 06_gallery_photo_displayed.png
+- 스크린샷: 02_camera_photo_displayed.png, 03_gallery_photo_displayed.png
 
 ### 권한 거부 시 안내 화면
 
 - 조작: 카메라 권한을 초기화한다(실행 절차의 `adb` 명령). **카메라로 촬영**을 고르고 권한 대화상자에서 거부(Don't allow)를 누른 뒤, 안내 카드의 **설정에서 권한 열기**를 누른다
 - 기대 결과: 크래시 없이 "카메라 권한이 필요해요" 안내 카드가 뜨고, 버튼을 누르면 이 앱의 앱 정보(App info) 화면이 열린다
-- 스크린샷: 02_camera_permission_request.png, 03_permission_denied_notice.png, 04_app_settings_opened.png
+- 스크린샷: 01_permission_denied_notice.png
 
 ### 선택 취소 등 예외 흐름에서 정상 동작
 
 - 조작: **갤러리에서 선택**을 고른 뒤 사진을 고르지 않고 뒤로 가기로 닫는다. **사진 가져오기** 시트도 아무것도 고르지 않고 닫아 본다
 - 기대 결과: 오류 없이 직전 화면(빈 상태 또는 이전 사진)이 그대로 유지되고 계속 사용할 수 있다
-- 스크린샷: 07_picker_cancelled.png
+- 스크린샷: 04_picker_cancelled.png
 
 ### README에 권한 처리·예외 처리·실행 절차
 
@@ -213,16 +213,14 @@ Pixel 9 Pro 에뮬레이터(Android 16, x86_64)에서 각 단계의 앱으로 �
 ## 스크린샷
 
 `screenshots/` 한 폴더에 화면 순서대로 번호를 붙여 모았습니다. 모두 PNG이고 한 장에 2MB를 넘지 않습니다.
+단계마다 그 단계 평가 기준에 필요한 화면만 골라 앞 단계 화면 뒤에 더합니다(MP1 4장, MP2 7장, MP3 10장).
 
 | 파일 | 단계 | 내용 |
 |---|---|---|
-| `01_photo_source_sheet.png` | MP1 | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
-| `02_camera_permission_request.png` | MP1 | 카메라를 고르면 뜨는 권한 요청 대화상자 |
-| `03_permission_denied_notice.png` | MP1 | 권한을 거부했을 때의 안내 화면(설정 경로 안내 포함) |
-| `04_app_settings_opened.png` | MP1 | 안내 화면의 "설정에서 권한 열기"로 연 앱 설정 화면 |
-| `05_camera_photo_displayed.png` | MP1 | 권한 허용 후 카메라로 촬영한 사진 표시 |
-| `06_gallery_photo_displayed.png` | MP1 | 갤러리에서 고른 사진 표시 |
-| `07_picker_cancelled.png` | MP1 | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
+| `01_permission_denied_notice.png` | MP1 | 카메라 권한을 거부했을 때의 안내 화면(설정 경로 안내와 "설정에서 권한 열기" 버튼) |
+| `02_camera_photo_displayed.png` | MP1 | 권한 허용 후 카메라로 촬영한 사진 표시 |
+| `03_gallery_photo_displayed.png` | MP1 | 갤러리에서 고른 사진 표시 |
+| `04_picker_cancelled.png` | MP1 | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
 
 ## 민감정보
 
