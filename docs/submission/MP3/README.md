@@ -46,9 +46,7 @@ app/                 이력·공유가 추가된 최종 앱 소스
   android/, ios/     플랫폼 설정
 README.md            이 문서
 PRIVACY.md           저장하는 것과 저장하지 않는 것
-screenshots/MP1/     MP1 화면 캡처 7장
-screenshots/MP2/     MP2 화면 캡처 5장
-screenshots/MP3/     MP3 화면 캡처 7장
+screenshots/         화면 캡처 12장(화면 순서대로 번호)
 prompts_log.md       AI 도구와의 논의에서 정한 결정 사항
 ```
 
@@ -370,19 +368,19 @@ adb shell am force-stop com.example.ondevice_image_capstone
 
 ## 확인 방법
 
-검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP3(분석 이력과 공유)의 평가 기준 이름이고, 스크린샷은 `screenshots/` 안의 경로입니다.
+검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP3(분석 이력과 공유)의 평가 기준 이름이고, 스크린샷은 `screenshots/` 안의 파일 이름입니다.
 
 ### 이력 저장·목록·삭제, 재시작 후 유지
 
 - 조작: 텍스트 분석과 사물 분석을 한 번씩 실행한 뒤 사진 선택 화면의 **분석 이력 보기**를 연다. 앱을 강제 종료(`adb shell am force-stop com.example.ondevice_image_capstone`)하고 다시 실행해 이력을 연다. 한 항목의 **삭제**를 누르고 확인한다
 - 기대 결과: 두 결과가 최신순으로 표시되고, 재시작 후에도 그대로 남으며, 삭제한 항목만 목록에서 사라진다
-- 스크린샷: MP3/01_result_saved.png, MP3/03_history_list.png, MP3/05_history_after_restart.png, MP3/06_delete_confirm.png, MP3/07_history_after_delete.png
+- 스크린샷: 06_result_saved.png, 08_history_list.png, 10_history_after_restart.png, 11_delete_confirm.png, 12_history_after_delete.png
 
 ### 공유 시트
 
 - 조작: 결과 화면과 이력 화면에서 각각 **결과 공유하기**를 누른다
 - 기대 결과: OS 공유 시트가 열리고, 전달 내용에 사진 없이 결과 텍스트와 처리 시간만 표시된다
-- 스크린샷: MP3/02_share_sheet_from_result.png, MP3/04_share_sheet_from_history.png
+- 스크린샷: 07_share_sheet_from_result.png, 09_share_sheet_from_history.png
 
 ### PRIVACY.md 저장/비저장 항목
 
@@ -472,41 +470,23 @@ Pixel 9 Pro 에뮬레이터(Android 16, x86_64)에서 각 단계의 앱으로 �
 
 ## 스크린샷
 
-단계별 하위 폴더에 나눠 두었으며, 다음 단계 제출물에는 앞 단계의 폴더가 그대로 들어갑니다.
+`screenshots/` 한 폴더에 화면 순서대로 번호를 붙여 모았습니다. 모두 PNG이고 한 장에 2MB를 넘지 않습니다.
+제출 규칙의 12장 제한에 맞춰, 앞 단계 화면은 이력에 저장되는 분석 결과와 오프라인 동작을 보여주는 5장만 남겼습니다. 나머지 앞 단계 화면은 MP1·MP2 제출물에 있습니다.
 
-### MP1 (`screenshots/MP1/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_photo_source_sheet.png` | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
-| `02_camera_permission_request.png` | 카메라를 고르면 뜨는 권한 요청 대화상자 |
-| `03_permission_denied_notice.png` | 권한을 거부했을 때의 안내 화면(설정 경로 안내 포함) |
-| `04_app_settings_opened.png` | 안내 화면의 "설정에서 권한 열기"로 연 앱 설정 화면 |
-| `05_camera_photo_displayed.png` | 권한 허용 후 카메라로 촬영한 사진 표시 |
-| `06_gallery_photo_displayed.png` | 갤러리에서 고른 사진 표시 |
-| `07_picker_cancelled.png` | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
-
-### MP2 (`screenshots/MP2/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_text_analysis_result.png` | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
-| `02_airplane_mode_text_result.png` | 비행기 모드에서 같은 사진을 분석한 결과 |
-| `03_airplane_mode_photo_selected.png` | 비행기 모드에서 글자가 없는 사진을 고른 화면 |
-| `04_airplane_mode_unrecognizable_notice.png` | 그 사진을 분석했을 때의 인식 불가 안내 |
-| `05_object_analysis_result.png` | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
-
-### MP3 (`screenshots/MP3/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_result_saved.png` | 분석 결과 화면 — 결과가 이력에 저장됨 |
-| `02_share_sheet_from_result.png` | 결과 화면의 "결과 공유하기"로 연 공유 시트 |
-| `03_history_list.png` | 분석 이력 목록 |
-| `04_share_sheet_from_history.png` | 이력 화면의 "결과 공유하기"로 연 공유 시트 |
-| `05_history_after_restart.png` | 앱을 강제 종료하고 다시 실행한 뒤에도 유지된 이력 |
-| `06_delete_confirm.png` | 이력 삭제 확인 대화상자 |
-| `07_history_after_delete.png` | 삭제 후 이력 목록 |
+| 파일 | 단계 | 내용 |
+|---|---|---|
+| `01_photo_source_sheet.png` | MP1 | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
+| `02_text_analysis_result.png` | MP2 | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
+| `03_object_analysis_result.png` | MP2 | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
+| `04_airplane_mode_text_result.png` | MP2 | 비행기 모드에서 같은 사진을 분석한 결과 |
+| `05_airplane_mode_unrecognizable_notice.png` | MP2 | 그 사진을 분석했을 때의 인식 불가 안내 |
+| `06_result_saved.png` | MP3 | 분석 결과 화면 — 결과가 이력에 저장됨 |
+| `07_share_sheet_from_result.png` | MP3 | 결과 화면의 "결과 공유하기"로 연 공유 시트 |
+| `08_history_list.png` | MP3 | 분석 이력 목록 |
+| `09_share_sheet_from_history.png` | MP3 | 이력 화면의 "결과 공유하기"로 연 공유 시트 |
+| `10_history_after_restart.png` | MP3 | 앱을 강제 종료하고 다시 실행한 뒤에도 유지된 이력 |
+| `11_delete_confirm.png` | MP3 | 이력 삭제 확인 대화상자 |
+| `12_history_after_delete.png` | MP3 | 삭제 후 이력 목록 |
 
 ## 민감정보
 

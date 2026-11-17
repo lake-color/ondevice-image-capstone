@@ -43,8 +43,7 @@ app/                 분석 기능이 추가된 앱 소스
   tool/              모델 검사 도구
   android/, ios/     플랫폼 설정
 README.md            이 문서
-screenshots/MP1/     MP1 화면 캡처 7장
-screenshots/MP2/     MP2 화면 캡처 5장
+screenshots/         화면 캡처 12장(화면 순서대로 번호)
 prompts_log.md       AI 도구와의 논의에서 정한 결정 사항
 ```
 
@@ -262,25 +261,25 @@ adb shell cmd connectivity airplane-mode disable
 
 ## 확인 방법
 
-검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP2(온디바이스 AI 분석)의 평가 기준 이름이고, 스크린샷은 `screenshots/` 안의 경로입니다.
+검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP2(온디바이스 AI 분석)의 평가 기준 이름이고, 스크린샷은 `screenshots/` 안의 파일 이름입니다.
 
 ### 입력→온디바이스 분석 결과 표시
 
 - 조작: 글자가 있는 이미지를 갤러리에서 고르고 **텍스트 분석**을 누른다
 - 기대 결과: 분석 중 화면을 거쳐 결과 화면에 원본 사진, 인식한 텍스트, 처리 시간이 표시된다
-- 스크린샷: MP2/01_text_analysis_result.png
+- 스크린샷: 08_text_analysis_result.png
 
 ### 비행기 모드에서도 분석 동작
 
 - 조작: 비행기 모드를 켜고(실행 절차의 `adb` 명령 또는 빠른 설정) 같은 이미지로 **텍스트 분석**을 다시 실행한다
 - 기대 결과: 상태 표시줄에 비행기 아이콘이 있는 상태에서도 같은 텍스트와 처리 시간이 표시된다
-- 스크린샷: MP2/02_airplane_mode_text_result.png
+- 스크린샷: 09_airplane_mode_text_result.png
 
 ### 인식 불가 이미지가 크래시 없이 안내로 처리
 
 - 조작: 비행기 모드인 채로 글자가 없는 이미지를 고르고 **텍스트 분석**을 누른다
 - 기대 결과: 앱이 종료되지 않고 "분석할 정보를 찾지 못했어요" 안내 카드와 **다른 사진 분석** 버튼이 표시된다
-- 스크린샷: MP2/03_airplane_mode_photo_selected.png, MP2/04_airplane_mode_unrecognizable_notice.png
+- 스크린샷: 10_airplane_mode_photo_selected.png, 11_airplane_mode_unrecognizable_notice.png
 
 ### README 처리 시간 측정값 + 민감정보 없음
 
@@ -338,29 +337,22 @@ Pixel 9 Pro 에뮬레이터(Android 16, x86_64)에서 각 단계의 앱으로 �
 
 ## 스크린샷
 
-단계별 하위 폴더에 나눠 두었으며, 다음 단계 제출물에는 앞 단계의 폴더가 그대로 들어갑니다.
+`screenshots/` 한 폴더에 화면 순서대로 번호를 붙여 모았습니다. 모두 PNG이고 한 장에 2MB를 넘지 않습니다.
 
-### MP1 (`screenshots/MP1/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_photo_source_sheet.png` | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
-| `02_camera_permission_request.png` | 카메라를 고르면 뜨는 권한 요청 대화상자 |
-| `03_permission_denied_notice.png` | 권한을 거부했을 때의 안내 화면(설정 경로 안내 포함) |
-| `04_app_settings_opened.png` | 안내 화면의 "설정에서 권한 열기"로 연 앱 설정 화면 |
-| `05_camera_photo_displayed.png` | 권한 허용 후 카메라로 촬영한 사진 표시 |
-| `06_gallery_photo_displayed.png` | 갤러리에서 고른 사진 표시 |
-| `07_picker_cancelled.png` | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
-
-### MP2 (`screenshots/MP2/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_text_analysis_result.png` | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
-| `02_airplane_mode_text_result.png` | 비행기 모드에서 같은 사진을 분석한 결과 |
-| `03_airplane_mode_photo_selected.png` | 비행기 모드에서 글자가 없는 사진을 고른 화면 |
-| `04_airplane_mode_unrecognizable_notice.png` | 그 사진을 분석했을 때의 인식 불가 안내 |
-| `05_object_analysis_result.png` | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
+| 파일 | 단계 | 내용 |
+|---|---|---|
+| `01_photo_source_sheet.png` | MP1 | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
+| `02_camera_permission_request.png` | MP1 | 카메라를 고르면 뜨는 권한 요청 대화상자 |
+| `03_permission_denied_notice.png` | MP1 | 권한을 거부했을 때의 안내 화면(설정 경로 안내 포함) |
+| `04_app_settings_opened.png` | MP1 | 안내 화면의 "설정에서 권한 열기"로 연 앱 설정 화면 |
+| `05_camera_photo_displayed.png` | MP1 | 권한 허용 후 카메라로 촬영한 사진 표시 |
+| `06_gallery_photo_displayed.png` | MP1 | 갤러리에서 고른 사진 표시 |
+| `07_picker_cancelled.png` | MP1 | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
+| `08_text_analysis_result.png` | MP2 | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
+| `09_airplane_mode_text_result.png` | MP2 | 비행기 모드에서 같은 사진을 분석한 결과 |
+| `10_airplane_mode_photo_selected.png` | MP2 | 비행기 모드에서 글자가 없는 사진을 고른 화면 |
+| `11_airplane_mode_unrecognizable_notice.png` | MP2 | 그 사진을 분석했을 때의 인식 불가 안내 |
+| `12_object_analysis_result.png` | MP2 | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
 
 ## 민감정보
 
