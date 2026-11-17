@@ -43,8 +43,7 @@ app/                 분석 기능이 추가된 앱 소스
   tool/              모델 검사 도구
   android/, ios/     플랫폼 설정
 README.md            이 문서
-screenshots/MP1/     MP1 화면 캡처 7장
-screenshots/MP2/     MP2 화면 캡처 5장
+screenshots/         화면 캡처 7장(화면 순서대로 번호)
 prompts_log.md       AI 도구와의 논의에서 정한 결정 사항
 ```
 
@@ -217,6 +216,12 @@ TensorFlow Lite로 앱에 내장한 MobileNetV3 Small 모델을 실행해 ImageN
 
 ## 실행 절차
 
+| 항목 | 내용 |
+|---|---|
+| 프레임워크·SDK | Flutter 3.47.5 (stable) · Dart 3.13.4. 버전은 `app/.fvmrc`로 고정 |
+| 실행 기기 | Pixel 9 Pro 에뮬레이터 (Android 16, API 36, x86_64) |
+| 확인하지 않은 기기 | 실기기, iOS |
+
 FVM과 Android 또는 iOS 개발 도구를 설치하고 기기나 에뮬레이터를 연결합니다. iOS 빌드에는 macOS와 Xcode가 필요합니다.
 PATH의 `flutter`가 다른 버전이면 `pub get`이 실패하므로 `fvm flutter`를 사용합니다.
 
@@ -253,6 +258,44 @@ fvm flutter drive --profile --driver=test/integration/driver.dart --target=test/
 adb shell cmd connectivity airplane-mode enable
 adb shell cmd connectivity airplane-mode disable
 ```
+
+## 확인 방법
+
+검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP2(온디바이스 AI 분석)의 평가 기준 이름이고, 스크린샷은 `screenshots/` 안의 파일 이름입니다.
+
+### 입력→온디바이스 분석 결과 표시
+
+- 조작: 글자가 있는 이미지를 갤러리에서 고르고 **텍스트 분석**을 누른다
+- 기대 결과: 분석 중 화면을 거쳐 결과 화면에 원본 사진, 인식한 텍스트, 처리 시간이 표시된다
+- 스크린샷: 05_text_analysis_result.png
+
+### 비행기 모드에서도 분석 동작
+
+- 조작: 비행기 모드를 켜고(실행 절차의 `adb` 명령 또는 빠른 설정) 같은 이미지로 **텍스트 분석**을 다시 실행한다
+- 기대 결과: 상태 표시줄에 비행기 아이콘이 있는 상태에서도 같은 텍스트와 처리 시간이 표시된다
+- 스크린샷: 06_airplane_mode_text_result.png
+
+### 인식 불가 이미지가 크래시 없이 안내로 처리
+
+- 조작: 비행기 모드인 채로 글자가 없는 이미지를 고르고 **텍스트 분석**을 누른다
+- 기대 결과: 앱이 종료되지 않고 "분석할 정보를 찾지 못했어요" 안내 카드와 **다른 사진 분석** 버튼이 표시된다
+- 스크린샷: 07_airplane_mode_unrecognizable_notice.png
+
+### README 처리 시간 측정값 + 민감정보 없음
+
+- 조작: 이 문서의 **처리 시간 측정값**과 **민감정보** 절을 본다. 다시 재려면 실행 절차의 `flutter drive` 명령을 실행한다
+- 기대 결과: 측정 구간·환경과 함께 텍스트 인식 10회 평균 248.4 ms(비행기 모드 255.9 ms)가 적혀 있고, 출력의 `TIMING` 줄로 같은 방식의 값이 나온다. 제출물에 원본 사진과 키가 없다
+- 스크린샷: 없음(문서 확인 항목)
+
+### README 실행 절차·확인 방법 절
+
+- 조작: 이 문서의 **실행 절차**와 **확인 방법** 절을 본다
+- 기대 결과: 실행 명령 코드 블록, Flutter·Dart 버전, 실행 기기가 있고, 기준마다 조작·기대 결과·스크린샷이 있다
+- 스크린샷: 없음(문서 확인 항목)
+
+시험 데이터: 텍스트 분석에는 직접 만든 4줄 글자 이미지("온디바이스 사진 분석", "회의록 2026년 11월 15일", "On-device OCR Test 123", "사진은 서버로 보내지 않습니다."), 인식 불가 확인에는 글자가 없는 도형 이미지를 썼습니다. 원본 파일은 제출물에 넣지 않았으며, 글자가 또렷한 아무 이미지와 단색·도형 이미지로 확인할 수 있습니다. 처리 시간 테스트(`test/integration/processing_time_device.dart`)는 기기에서 이미지를 직접 그려 사진 파일이 필요 없습니다.
+
+네트워크: 불필요. 비행기 모드 항목은 비행기 모드에서, 나머지는 온라인·비행기 모드 어느 쪽이든 확인할 수 있습니다.
 
 ## 검증 결과
 
@@ -294,29 +337,18 @@ Pixel 9 Pro 에뮬레이터(Android 16, x86_64)에서 각 단계의 앱으로 �
 
 ## 스크린샷
 
-단계별 하위 폴더에 나눠 두었으며, 다음 단계 제출물에는 앞 단계의 폴더가 그대로 들어갑니다.
+`screenshots/` 한 폴더에 화면 순서대로 번호를 붙여 모았습니다. 모두 PNG이고 한 장에 2MB를 넘지 않습니다.
+단계마다 그 단계 평가 기준에 필요한 화면만 골라 앞 단계 화면 뒤에 더합니다(MP1 4장, MP2 7장, MP3 10장).
 
-### MP1 (`screenshots/MP1/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_photo_source_sheet.png` | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
-| `02_camera_permission_request.png` | 카메라를 고르면 뜨는 권한 요청 대화상자 |
-| `03_permission_denied_notice.png` | 권한을 거부했을 때의 안내 화면(설정 경로 안내 포함) |
-| `04_app_settings_opened.png` | 안내 화면의 "설정에서 권한 열기"로 연 앱 설정 화면 |
-| `05_camera_photo_displayed.png` | 권한 허용 후 카메라로 촬영한 사진 표시 |
-| `06_gallery_photo_displayed.png` | 갤러리에서 고른 사진 표시 |
-| `07_picker_cancelled.png` | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
-
-### MP2 (`screenshots/MP2/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_text_analysis_result.png` | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
-| `02_airplane_mode_text_result.png` | 비행기 모드에서 같은 사진을 분석한 결과 |
-| `03_airplane_mode_photo_selected.png` | 비행기 모드에서 글자가 없는 사진을 고른 화면 |
-| `04_airplane_mode_unrecognizable_notice.png` | 그 사진을 분석했을 때의 인식 불가 안내 |
-| `05_object_analysis_result.png` | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
+| 파일 | 단계 | 내용 |
+|---|---|---|
+| `01_permission_denied_notice.png` | MP1 | 카메라 권한을 거부했을 때의 안내 화면(설정 경로 안내와 "설정에서 권한 열기" 버튼) |
+| `02_camera_photo_displayed.png` | MP1 | 권한 허용 후 카메라로 촬영한 사진 표시 |
+| `03_gallery_photo_displayed.png` | MP1 | 갤러리에서 고른 사진 표시 |
+| `04_picker_cancelled.png` | MP1 | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
+| `05_text_analysis_result.png` | MP2 | 텍스트 분석 결과(원본 사진, 인식한 텍스트, 처리 시간) |
+| `06_airplane_mode_text_result.png` | MP2 | 비행기 모드에서 같은 사진을 분석한 결과 |
+| `07_airplane_mode_unrecognizable_notice.png` | MP2 | 비행기 모드에서 글자가 없는 사진을 분석했을 때의 인식 불가 안내 |
 
 ## 민감정보
 

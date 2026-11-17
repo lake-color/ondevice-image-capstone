@@ -308,6 +308,12 @@ TensorFlow Lite로 앱에 내장한 MobileNetV3 Small 모델을 실행해 ImageN
 
 ## 실행 절차
 
+| 항목 | 내용 |
+|---|---|
+| 프레임워크·SDK | Flutter 3.47.5 (stable) · Dart 3.13.4. 버전은 `.fvmrc`로 고정 |
+| 실행 기기 | Pixel 9 Pro 에뮬레이터 (Android 16, API 36, x86_64) |
+| 확인하지 않은 기기 | 실기기, iOS |
+
 FVM과 Android 또는 iOS 개발 도구를 설치하고 기기나 에뮬레이터를 연결합니다. iOS 빌드에는 macOS와 Xcode가 필요합니다.
 PATH의 `flutter`가 다른 버전이면 `pub get`이 실패하므로 `fvm flutter`를 사용합니다.
 
@@ -358,6 +364,50 @@ adb shell am force-stop com.example.ondevice_image_capstone
 ```
 
 기기 통합 테스트 전체 목록은 `test/README.md`를 참고하세요.
+
+## 확인 방법
+
+검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP3(분석 이력과 공유)의 평가 기준 이름이고, 스크린샷은 `docs/submission/MP3/screenshots/` 안의 파일 이름입니다.
+
+### 이력 저장·목록·삭제, 재시작 후 유지
+
+- 조작: 텍스트 분석과 사물 분석을 한 번씩 실행한 뒤 사진 선택 화면의 **분석 이력 보기**를 연다. 앱을 강제 종료(`adb shell am force-stop com.example.ondevice_image_capstone`)하고 다시 실행해 이력을 연다. 한 항목의 **삭제**를 누르고 확인한다
+- 기대 결과: 두 결과가 최신순으로 표시되고, 재시작 후에도 그대로 남으며, 삭제한 항목만 목록에서 사라진다
+- 스크린샷: 09_history_after_restart.png, 10_history_after_delete.png
+
+### 공유 시트
+
+- 조작: 결과 화면과 이력 화면에서 각각 **결과 공유하기**를 누른다
+- 기대 결과: OS 공유 시트가 열리고, 전달 내용에 사진 없이 결과 텍스트와 처리 시간만 표시된다
+- 스크린샷: 08_share_sheet_from_result.png
+
+### PRIVACY.md 저장/비저장 항목
+
+- 조작: [PRIVACY.md](docs/submission/MP3/PRIVACY.md)를 연다
+- 기대 결과: 저장하는 것(필드·예시·이유)과 저장하지 않는 것(이유·코드 위치), 분석 중에만 존재하는 것, 기기 밖으로 나가는 것이 정리되어 있다
+- 스크린샷: 없음(문서 확인 항목)
+
+### 원본 이미지 미저장 + 민감정보 없음
+
+- 조작: 분석을 한 번 실행한 뒤 실행 절차의 `run-as` 명령으로 이력 파일과 캐시를 본다. 사진 선택 화면을 나간 뒤 캐시를 다시 본다
+- 기대 결과: `analysis_history.json`에 텍스트 필드만 있고 사진 데이터·경로가 없으며, 화면을 나가면 캐시의 임시 사본이 지워진다. 제출물에 원본 사진과 키가 없다
+- 스크린샷: 없음(문서 확인 항목)
+
+### 입력 데이터·스크린샷에 실제 개인정보 없음
+
+- 조작: `docs/submission/MP3/screenshots/`의 화면 캡처와 아래 시험 데이터를 본다
+- 기대 결과: 실명·연락처·인물 사진이 없다. 공유 시트에도 추천 연락처가 없다("No recommended people to share with")
+- 스크린샷: `docs/submission/MP3/screenshots/` 안의 모든 파일
+
+### README 실행 절차·확인 방법 절
+
+- 조작: 이 문서의 **실행 절차**와 **확인 방법** 절을 본다
+- 기대 결과: 실행 명령 코드 블록, Flutter·Dart 버전, 실행 기기가 있고, 기준마다 조작·기대 결과·스크린샷이 있다
+- 스크린샷: 없음(문서 확인 항목)
+
+시험 데이터: 텍스트 분석에는 직접 만든 4줄 글자 이미지("온디바이스 사진 분석", "회의록 2026년 11월 15일", "On-device OCR Test 123", "사진은 서버로 보내지 않습니다."), 인식 불가 확인에는 글자가 없는 도형 이미지를 썼습니다. 원본 파일은 제출물에 넣지 않았으며, 글자가 또렷한 아무 이미지와 단색·도형 이미지로 확인할 수 있습니다. 처리 시간 테스트(`test/integration/processing_time_device.dart`)는 기기에서 이미지를 직접 그려 사진 파일이 필요 없습니다. 이력 데이터는 앱을 실행하며 분석한 결과로 만들어지고, 미리 넣어 둔 데이터는 없습니다.
+
+네트워크: 불필요. 비행기 모드 항목은 비행기 모드에서, 나머지는 온라인·비행기 모드 어느 쪽이든 확인할 수 있습니다.
 
 ## 검증 결과
 
@@ -417,46 +467,21 @@ Pixel 9 Pro 에뮬레이터(Android 16, x86_64)에서 각 단계의 앱으로 �
 
 ## 스크린샷
 
-단계별 하위 폴더에 나눠 두었으며, 다음 단계 제출물에는 앞 단계의 폴더가 그대로 들어갑니다.
+`docs/submission/MP3/screenshots/` 한 폴더에 화면 순서대로 번호를 붙여 모았습니다. 모두 PNG이고 한 장에 2MB를 넘지 않습니다.
+단계마다 그 단계 평가 기준에 필요한 화면만 골라 앞 단계 화면 뒤에 더합니다(MP1 4장, MP2 7장, MP3 10장).
 
-### MP1 (`docs/submission/MP3/screenshots/MP1/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_photo_source_sheet.png` | 사진 가져오기 시트 — 카메라·갤러리 선택과 권한이 필요한 이유 |
-| `02_camera_permission_request.png` | 카메라를 고르면 뜨는 권한 요청 대화상자 |
-| `03_permission_denied_notice.png` | 권한을 거부했을 때의 안내 화면(설정 경로 안내 포함) |
-| `04_app_settings_opened.png` | 안내 화면의 "설정에서 권한 열기"로 연 앱 설정 화면 |
-| `05_camera_photo_displayed.png` | 권한 허용 후 카메라로 촬영한 사진 표시 |
-| `06_gallery_photo_displayed.png` | 갤러리에서 고른 사진 표시 |
-| `07_picker_cancelled.png` | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
-
-### MP2 (`docs/submission/MP3/screenshots/MP2/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_text_analysis_result.png` | 텍스트 분석 결과(인식한 텍스트와 처리 시간) |
-| `02_airplane_mode_text_result.png` | 비행기 모드에서 같은 사진을 분석한 결과 |
-| `03_airplane_mode_photo_selected.png` | 비행기 모드에서 글자가 없는 사진을 고른 화면 |
-| `04_airplane_mode_unrecognizable_notice.png` | 그 사진을 분석했을 때의 인식 불가 안내 |
-| `05_object_analysis_result.png` | 참고: 사물 분석 결과와 낮은 신뢰도 안내 |
-
-### MP3 (`docs/submission/MP3/screenshots/MP3/`)
-
-| 파일 | 내용 |
-|---|---|
-| `01_result_saved.png` | 분석 결과 화면 — 결과가 이력에 저장됨 |
-| `02_share_sheet_from_result.png` | 결과 화면의 "결과 공유하기"로 연 공유 시트 |
-| `03_history_list.png` | 분석 이력 목록 |
-| `04_share_sheet_from_history.png` | 이력 화면의 "결과 공유하기"로 연 공유 시트 |
-| `05_history_after_restart.png` | 앱을 강제 종료하고 다시 실행한 뒤에도 유지된 이력 |
-| `06_delete_confirm.png` | 이력 삭제 확인 대화상자 |
-| `07_history_after_delete.png` | 삭제 후 이력 목록 |
-
-## 제출 문서
-
-단계별 README, 스크린샷, 프롬프트 기록은 `docs/submission/MP1`~`MP3`에 있습니다.
-진행 현황은 [docs/STATUS.md](docs/STATUS.md), 기술 구성은 [docs/technical/ARCHITECTURE.md](docs/technical/ARCHITECTURE.md)를 참고하세요.
+| 파일 | 단계 | 내용 |
+|---|---|---|
+| `01_permission_denied_notice.png` | MP1 | 카메라 권한을 거부했을 때의 안내 화면(설정 경로 안내와 "설정에서 권한 열기" 버튼) |
+| `02_camera_photo_displayed.png` | MP1 | 권한 허용 후 카메라로 촬영한 사진 표시 |
+| `03_gallery_photo_displayed.png` | MP1 | 갤러리에서 고른 사진 표시 |
+| `04_picker_cancelled.png` | MP1 | 갤러리 선택을 취소한 뒤에도 그대로 유지되는 화면 |
+| `05_text_analysis_result.png` | MP2 | 텍스트 분석 결과(원본 사진, 인식한 텍스트, 처리 시간) |
+| `06_airplane_mode_text_result.png` | MP2 | 비행기 모드에서 같은 사진을 분석한 결과 |
+| `07_airplane_mode_unrecognizable_notice.png` | MP2 | 비행기 모드에서 글자가 없는 사진을 분석했을 때의 인식 불가 안내 |
+| `08_share_sheet_from_result.png` | MP3 | 결과 화면의 "결과 공유하기"로 연 공유 시트(결과 텍스트만 전달) |
+| `09_history_after_restart.png` | MP3 | 분석 결과가 저장된 이력 목록 — 앱을 강제 종료하고 다시 실행한 뒤에도 유지됨 |
+| `10_history_after_delete.png` | MP3 | 삭제 후 이력 목록 |
 
 ## 민감정보
 
