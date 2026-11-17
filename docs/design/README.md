@@ -2,7 +2,7 @@
 
 - [screens/](screens/): 시작·사진 선택·로딩·결과·이력 및 권한 거부·분석 실패·빈 이력 참고 화면 8개
 - [앱 이미지](../../assets/images/): 실제 화면에서 사용하는 일러스트와 아이콘
-- [제출용 캡처](../submission/screenshots/): 기존 캡처는 모두 삭제했으며 제출용 화면을 새로 저장할 폴더
+- 제출용 캡처: 단계별 제출물의 `screenshots/` 폴더([MP1](../submission/MP1/screenshots/), [MP2](../submission/MP2/screenshots/), [MP3](../submission/MP3/screenshots/))
 
 ## 기존 검토 요약
 
