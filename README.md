@@ -308,6 +308,12 @@ TensorFlow Lite로 앱에 내장한 MobileNetV3 Small 모델을 실행해 ImageN
 
 ## 실행 절차
 
+| 항목 | 내용 |
+|---|---|
+| 프레임워크·SDK | Flutter 3.47.5 (stable) · Dart 3.13.4. 버전은 `.fvmrc`로 고정 |
+| 실행 기기 | Pixel 9 Pro 에뮬레이터 (Android 16, API 36, x86_64) |
+| 확인하지 않은 기기 | 실기기, iOS |
+
 FVM과 Android 또는 iOS 개발 도구를 설치하고 기기나 에뮬레이터를 연결합니다. iOS 빌드에는 macOS와 Xcode가 필요합니다.
 PATH의 `flutter`가 다른 버전이면 `pub get`이 실패하므로 `fvm flutter`를 사용합니다.
 
@@ -358,6 +364,52 @@ adb shell am force-stop com.example.ondevice_image_capstone
 ```
 
 기기 통합 테스트 전체 목록은 `test/README.md`를 참고하세요.
+
+## 확인 방법
+
+검수할 때는 위 실행 절차대로 앱을 실행한 뒤 아래 기준별로 확인합니다. 소제목은 MP3(분석 이력과 공유)의 평가 기준 이름이고, 스크린샷은 `docs/submission/MP3/screenshots/` 안의 경로입니다.
+
+### 이력 저장·목록·삭제, 재시작 후 유지
+
+- 조작: 텍스트 분석과 사물 분석을 한 번씩 실행한 뒤 사진 선택 화면의 **분석 이력 보기**를 연다. 앱을 강제 종료(`adb shell am force-stop com.example.ondevice_image_capstone`)하고 다시 실행해 이력을 연다. 한 항목의 **삭제**를 누르고 확인한다
+- 기대 결과: 두 결과가 최신순으로 표시되고, 재시작 후에도 그대로 남으며, 삭제한 항목만 목록에서 사라진다
+- 스크린샷: MP3/01_result_saved.png, MP3/03_history_list.png, MP3/05_history_after_restart.png, MP3/06_delete_confirm.png, MP3/07_history_after_delete.png
+
+### 공유 시트
+
+- 조작: 결과 화면과 이력 화면에서 각각 **결과 공유하기**를 누른다
+- 기대 결과: OS 공유 시트가 열리고, 전달 내용에 사진 없이 결과 텍스트와 처리 시간만 표시된다
+- 스크린샷: MP3/02_share_sheet_from_result.png, MP3/04_share_sheet_from_history.png
+
+### PRIVACY.md 저장/비저장 항목
+
+- 조작: [PRIVACY.md](docs/submission/MP3/PRIVACY.md)를 연다
+- 기대 결과: 저장하는 것(필드·예시·이유)과 저장하지 않는 것(이유·코드 위치), 분석 중에만 존재하는 것, 기기 밖으로 나가는 것이 정리되어 있다
+- 스크린샷: 없음(문서 확인 항목)
+
+### 원본 이미지 미저장 + 민감정보 없음
+
+- 조작: 분석을 한 번 실행한 뒤 실행 절차의 `run-as` 명령으로 이력 파일과 캐시를 본다. 사진 선택 화면을 나간 뒤 캐시를 다시 본다
+- 기대 결과: `analysis_history.json`에 텍스트 필드만 있고 사진 데이터·경로가 없으며, 화면을 나가면 캐시의 임시 사본이 지워진다. 제출물에 원본 사진과 키가 없다
+- 스크린샷: 없음(문서 확인 항목)
+
+### 입력 데이터·스크린샷에 실제 개인정보 없음
+
+- 조작: `docs/submission/MP3/screenshots/`의 화면 캡처와 아래 시험 데이터를 본다
+- 기대 결과: 실명·연락처·인물 사진이 없다. 공유 시트에도 추천 연락처가 없다("No recommended people to share with")
+- 스크린샷: `docs/submission/MP3/screenshots/` 안의 모든 파일
+
+### README 실행 절차·확인 방법 절
+
+- 조작: 이 문서의 **실행 절차**와 **확인 방법** 절을 본다
+- 기대 결과: 실행 명령 코드 블록, Flutter·Dart 버전, 실행 기기가 있고, 기준마다 조작·기대 결과·스크린샷이 있다
+- 스크린샷: 없음(문서 확인 항목)
+
+시험 데이터: 텍스트 분석에는 직접 만든 4줄 글자 이미지("온디바이스 사진 분석", "회의록 2026년 11월 15일", "On-device OCR Test 123", "사진은 서버로 보내지 않습니다."), 인식 불가 확인에는 글자가 없는 도형 이미지를 썼습니다. 원본 파일은 제출물에 넣지 않았으며, 글자가 또렷한 아무 이미지와 단색·도형 이미지로 확인할 수 있습니다. 처리 시간 테스트(`test/integration/processing_time_device.dart`)는 기기에서 이미지를 직접 그려 사진 파일이 필요 없습니다.
+
+이력 데이터는 앱을 실행하며 분석한 결과로 만들어지고, 미리 넣어 둔 데이터는 없습니다.
+
+네트워크: 불필요. 비행기 모드 항목은 비행기 모드에서, 나머지는 온라인·비행기 모드 어느 쪽이든 확인할 수 있습니다.
 
 ## 검증 결과
 
